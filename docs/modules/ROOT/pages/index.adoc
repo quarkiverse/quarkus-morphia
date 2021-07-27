@@ -1,0 +1,22 @@
+= Quarkus - Morphia
+:extension-status: preview
+
+Describe what the extension does here.
+
+== Installation
+
+If you want to use this extension, you need to add the `io.quarkiverse.morphia:quarkus-morphia` extension first.
+In your `pom.xml` file, add:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.quarkiverse.morphia</groupId>
+    <artifactId>quarkus-morphia</artifactId>
+</dependency>
+----
+
+[[extension-configuration-reference]]
+== Extension Configuration Reference
+
+include::config.adoc[leveloffset=+1, opts=optional]
