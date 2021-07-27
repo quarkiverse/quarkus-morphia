@@ -1,0 +1,25 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "evanchooly",
+      "name": "Justin Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/195021?v=4",
+      "profile": "https://www.antwerkz.com",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "quarkus-morphia",
+  "projectOwner": "quarkiverse",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
