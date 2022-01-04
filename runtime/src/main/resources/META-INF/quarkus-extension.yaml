@@ -1,9 +1,12 @@
 name: Morphia
-#description: Morphia ...
+description: Advanced MongoDB support via Morphia
 metadata:
-#  keywords:
-#    - morphia
+  keywords:
+    - mongodb
+    - morphia
 #  guide: ...
-#  categories:
-#    - "miscellaneous"
-#  status: "preview"
+  categories:
+    - "data"
+  status: "preview"
+  config:
+    - "quarkus.morphia."

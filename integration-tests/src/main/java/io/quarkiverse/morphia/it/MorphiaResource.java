@@ -17,16 +17,22 @@
 package io.quarkiverse.morphia.it;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
+import dev.morphia.Datastore;
 
 @Path("/morphia")
 @ApplicationScoped
 public class MorphiaResource {
-    // add some rest methods here
+    @Inject
+    Datastore datastore;
 
     @GET
-    public String hello() {
-        return "Hello morphia";
+    @Produces("application/text")
+    public String databaseName() {
+        return datastore.getDatabase().getName();
     }
 }

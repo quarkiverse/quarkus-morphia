@@ -11,11 +11,11 @@ import io.quarkus.test.junit.QuarkusTest;
 public class MorphiaResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testDatastoreConfig() {
         given()
                 .when().get("/morphia")
                 .then()
                 .statusCode(200)
-                .body(is("Hello morphia"));
+                .body(is("morphia-int-test"));
     }
 }
