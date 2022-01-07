@@ -16,6 +16,9 @@
 */
 package io.quarkiverse.morphia.it;
 
+import static dev.morphia.query.experimental.filters.Filters.eq;
+import static java.util.List.of;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -23,6 +26,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import dev.morphia.Datastore;
+import io.quarkiverse.morphia.it.models.Book;
 
 @Path("/morphia")
 @ApplicationScoped
@@ -34,5 +38,15 @@ public class MorphiaResource {
     @Produces("application/text")
     public String databaseName() {
         return datastore.getDatabase().getName();
+    }
+
+    @GET
+    @Path("/create")
+    @Produces("application/json")
+    public Book persistAndReturn() {
+        Book book = new Book();
+        book.title = "The Eye of the World";
+        datastore.save(of(book));
+        return datastore.find(Book.class).filter(eq("_id", book.id)).first();
     }
 }

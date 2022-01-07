@@ -1,5 +1,7 @@
 package io.quarkiverse.morphia.deployment;
 
+import static io.quarkus.mongodb.runtime.MongoClientBeanUtil.DEFAULT_MONGOCLIENT_NAME;
+
 import javax.inject.Singleton;
 
 import dev.morphia.Datastore;
@@ -13,23 +15,29 @@ import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.mongodb.runtime.MongoClientRecorder;
+import io.quarkus.mongodb.runtime.MongodbConfig;
 
 public class MorphiaProcessor {
     private static final String FEATURE = "morphia";
     private static final Class<?> PROVIDER_CLASS = DatastoreProvider.class;
 
     @BuildStep
-    @Record(ExecutionTime.STATIC_INIT)
-    public SyntheticBeanBuildItem createDatastore(MorphiaRecorder recorder, MorphiaConfig config) {
+    @Record(ExecutionTime.RUNTIME_INIT)
+    public SyntheticBeanBuildItem datastoreRecorder(MongoClientRecorder clientRecorder, MongodbConfig mongodbConfig,
+            MorphiaRecorder recorder,
+            MorphiaConfig config) {
+        System.out.println("**********8 MorphiaProcessor.datastoreRecorder");
         return SyntheticBeanBuildItem
                 .configure(Datastore.class)
                 .scope(Singleton.class)
-                .supplier(recorder.configureMapperOptions(config))
+                .supplier(recorder
+                        .datastoreSupplier(clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config))
                 .setRuntimeInit()
                 .done();
     }
 
-    @BuildStep
+    //    @BuildStep
     public DatastoreProviderBuildItem createDatastore(
             CombinedIndexBuildItem index,
             MorphiaConfig config,

@@ -15,6 +15,10 @@
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-jackson</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkiverse.morphia</groupId>
       <artifactId>quarkus-morphia</artifactId>
       <version>${project.version}</version>

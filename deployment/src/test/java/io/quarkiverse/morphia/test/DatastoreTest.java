@@ -24,5 +24,6 @@ public class DatastoreTest {
     @Test
     public void testDatastorePresent() {
         Assertions.assertNotNull(datastore, "A datastore should be configured");
+        Assertions.assertEquals("quarkus-morphia-test", datastore.getDatabase().getName(), "A datastore should be configured");
     }
 }
