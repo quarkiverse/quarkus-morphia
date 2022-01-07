@@ -3,7 +3,7 @@ package io.quarkiverse.morphia;
 import static dev.morphia.mapping.DiscriminatorFunction.*;
 import static dev.morphia.mapping.NamingStrategy.*;
 import static dev.morphia.mapping.NamingStrategy.identity;
-import static io.quarkus.runtime.annotations.ConfigPhase.BUILD_AND_RUN_TIME_FIXED;
+import static io.quarkus.runtime.annotations.ConfigPhase.RUN_TIME;
 
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Property;
@@ -16,7 +16,7 @@ import dev.morphia.mapping.NamingStrategy;
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
-@ConfigRoot(name = "morphia", phase = BUILD_AND_RUN_TIME_FIXED)
+@ConfigRoot(name = "morphia", phase = RUN_TIME)
 public class MorphiaConfig {
     /**
      * The database to use

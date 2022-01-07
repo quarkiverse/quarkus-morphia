@@ -23,6 +23,20 @@ public class MorphiaResourceTest {
 
     @Test()
     public void testPersist() {
+        /*
+         * @GET
+         * 
+         * @Path("/create")
+         * 
+         * @Produces("application/json")
+         * public Book persistAndReturn() {
+         * Book book = new Book();
+         * book.title = "The Eye of the World";
+         * datastore.save(of(book));
+         * return datastore.find(Book.class).filter(eq("_id", book.id)).first();
+         * }
+         */
+
         given()
                 .when().get("/morphia/create")
                 .then()
