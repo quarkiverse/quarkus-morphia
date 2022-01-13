@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -31,6 +32,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import dev.morphia.Datastore;
+import dev.morphia.aggregation.experimental.stages.Lookup;
+import dev.morphia.aggregation.experimental.stages.Unwind;
+import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
 
 @Path("/morphia")
@@ -56,17 +60,25 @@ public class MorphiaResource {
     }
 
     @POST
+    @Consumes("application/json")
     public Response addBook(Book book) {
+        datastore.save(book.author);
         datastore.save(book);
-        return Response.accepted().build();
+        return Response.accepted(book.id.toString()).build();
     }
 
     @GET
     @Path("/{author}")
+    @Produces("application/json")
     public List<Book> getBooksByAuthor(@PathParam("author") String author) {
-        return datastore.find(Book.class)
-                .filter(eq("author", author))
-                .iterator()
+        return datastore.aggregate(Book.class)
+                .lookup(Lookup.lookup(Author.class)
+                        .localField("author")
+                        .foreignField("_id")
+                        .as("author"))
+                .unwind(Unwind.unwind("author"))
+                .match(eq("author.name", author))
+                .execute(Book.class)
                 .toList();
     }
 

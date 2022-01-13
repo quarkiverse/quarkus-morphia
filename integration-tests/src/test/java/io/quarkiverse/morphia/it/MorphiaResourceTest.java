@@ -5,8 +5,13 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 
+import org.bson.types.ObjectId;
+import org.hamcrest.Description;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
 
+import io.quarkiverse.morphia.it.models.Author;
+import io.quarkiverse.morphia.it.models.Book;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
@@ -23,25 +28,29 @@ public class MorphiaResourceTest {
 
     @Test()
     public void testPersist() {
-        /*
-         * @GET
-         * 
-         * @Path("/create")
-         * 
-         * @Produces("application/json")
-         * public Book persistAndReturn() {
-         * Book book = new Book();
-         * book.title = "The Eye of the World";
-         * datastore.save(of(book));
-         * return datastore.find(Book.class).filter(eq("_id", book.id)).first();
-         * }
-         */
+        Book book = new Book("The Eye of the World");
+        book.author = new Author("Robert Jordan");
 
         given()
-                .when().get("/morphia/create")
+                .header("Content-Type", "application/json")
+                .body(book)
+                .when().post("/morphia/")
+                .then()
+                .statusCode(202)
+                .body(isA(String.class))
+                .body(new IsInstanceOf(ObjectId.class) {
+                    @Override
+                    protected boolean matches(Object item, Description mismatch) {
+                        return ObjectId.isValid(item.toString());
+                    }
+                });
+
+        given()
+                .header("Content-Type", "application/json")
+                .when().get("/morphia/Robert Jordan")
                 .then()
                 .statusCode(200)
-                .body(isA(String.class))
-                .body(containsString("The Eye of the World"));
+                .body(containsString("Robert Jordan"));
+
     }
 }
