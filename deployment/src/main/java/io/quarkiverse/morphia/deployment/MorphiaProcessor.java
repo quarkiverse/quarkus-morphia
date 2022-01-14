@@ -33,23 +33,23 @@ import static io.quarkus.mongodb.runtime.MongoClientBeanUtil.DEFAULT_MONGOCLIENT
 import static java.util.List.of;
 
 public class MorphiaProcessor {
-    public static final List<DotName> MAPPED_TYPE_ANNOTATIONS =
-        of(DotName.createSimple(Entity.class.getName()),
+    public static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
             DotName.createSimple(EmbeddedBuilder.class.getName()));
     private static final String FEATURE = "morphia";
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    public SyntheticBeanBuildItem datastoreRecorder(MongoClientRecorder clientRecorder, MongodbConfig mongodbConfig,
-                                                    MorphiaRecorder recorder, MorphiaConfig config) {
+    public SyntheticBeanBuildItem datastoreRecorder(MongoClientRecorder clientRecorder,
+            MongodbConfig mongodbConfig,
+            MorphiaRecorder recorder,
+            MorphiaConfig config) {
 
-        return SyntheticBeanBuildItem
-            .configure(Datastore.class)
-            .scope(Singleton.class)
-            .supplier(recorder
-                .datastoreSupplier(clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config))
-            .setRuntimeInit()
-            .done();
+        return SyntheticBeanBuildItem.configure(Datastore.class)
+                .scope(Singleton.class)
+                .supplier(recorder.datastoreSupplier(
+                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config))
+                .setRuntimeInit()
+                .done();
     }
 
     @BuildStep
@@ -77,12 +77,9 @@ public class MorphiaProcessor {
 
     private void registerMappedTypes(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
         for (DotName annotation : MAPPED_TYPE_ANNOTATIONS) {
-            index.getKnownClasses().stream()
-                 .filter(info -> info.classAnnotation(annotation) != null)
-                 .forEach(info -> {
-                     reflectiveClasses
-                         .produce(new ReflectiveClassBuildItem(true, true, info.name().toString()));
-                 });
+            index.getKnownClasses().stream().filter(info -> info.classAnnotation(annotation) != null).forEach(info -> {
+                reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, info.name().toString()));
+            });
         }
     }
 
