@@ -6,14 +6,23 @@ import java.util.Objects;
 import org.bson.types.ObjectId;
 
 import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.Field;
 import dev.morphia.annotations.Id;
+import dev.morphia.annotations.Index;
+import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Indexes;
 import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Validation;
+import dev.morphia.utils.IndexType;
 
-@Entity
+@Entity("books")
+@Validation("{ name: { $exists:  true } }")
+@Indexes(value = @Index(fields = @Field(value = "title", type = IndexType.TEXT)))
 public class Book {
     @Id
     public ObjectId id;
     public String title;
+    @Indexed
     public LocalDate published;
     @Reference(idOnly = true)
     public Author author;

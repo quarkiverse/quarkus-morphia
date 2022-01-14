@@ -1,7 +1,51 @@
 package io.quarkiverse.morphia.deployment;
 
+import static io.quarkus.mongodb.runtime.MongoClientBeanUtil.DEFAULT_MONGOCLIENT_NAME;
+import static java.util.List.of;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Singleton;
+
+import org.bson.codecs.Codec;
+import org.jboss.jandex.ClassInfo;
+import org.jboss.jandex.DotName;
+import org.jboss.jandex.Index;
+import org.jboss.jandex.Indexer;
+import org.jboss.jandex.JarIndexer;
+import org.jetbrains.annotations.NotNull;
+
 import dev.morphia.Datastore;
+import dev.morphia.annotations.AlsoLoad;
+import dev.morphia.annotations.CappedAt;
+import dev.morphia.annotations.Collation;
+import dev.morphia.annotations.Converters;
+import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
+import dev.morphia.annotations.EntityListeners;
+import dev.morphia.annotations.Field;
+import dev.morphia.annotations.Handler;
+import dev.morphia.annotations.Id;
+import dev.morphia.annotations.IdGetter;
+import dev.morphia.annotations.IndexOptions;
+import dev.morphia.annotations.Indexed;
+import dev.morphia.annotations.Indexes;
+import dev.morphia.annotations.LoadOnly;
+import dev.morphia.annotations.NotSaved;
+import dev.morphia.annotations.PostLoad;
+import dev.morphia.annotations.PostPersist;
+import dev.morphia.annotations.PreLoad;
+import dev.morphia.annotations.PrePersist;
+import dev.morphia.annotations.Property;
+import dev.morphia.annotations.Reference;
+import dev.morphia.annotations.Text;
+import dev.morphia.annotations.Transient;
+import dev.morphia.annotations.Validation;
+import dev.morphia.annotations.Version;
 import dev.morphia.annotations.experimental.EmbeddedBuilder;
 import dev.morphia.mapping.codec.references.ReferenceCodec;
 import io.quarkiverse.morphia.MorphiaConfig;
@@ -14,23 +58,6 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.mongodb.runtime.MongoClientRecorder;
 import io.quarkus.mongodb.runtime.MongodbConfig;
-import org.bson.codecs.Codec;
-import org.jboss.jandex.ClassInfo;
-import org.jboss.jandex.DotName;
-import org.jboss.jandex.Index;
-import org.jboss.jandex.Indexer;
-import org.jboss.jandex.JarIndexer;
-import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Singleton;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.Set;
-
-import static io.quarkus.mongodb.runtime.MongoClientBeanUtil.DEFAULT_MONGOCLIENT_NAME;
-import static java.util.List.of;
 
 public class MorphiaProcessor {
     public static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
@@ -57,8 +84,40 @@ public class MorphiaProcessor {
         registerWrapperArrays(reflectiveClasses);
         Index index = indexJar();
         registerImplementors(index, reflectiveClasses, DotName.createSimple(Codec.class.getName()));
-        //        registerMappedTypes(index, reflectiveClasses);
+        registerMappedTypes(index, reflectiveClasses);
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, ReferenceCodec.class));
+        registerAnnotations(reflectiveClasses);
+    }
+
+    private void registerAnnotations(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, AlsoLoad.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, CappedAt.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Collation.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Converters.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, dev.morphia.annotations.Index.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Embedded.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Entity.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, EntityListeners.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Field.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Handler.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Id.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IdGetter.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Index.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexed.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexes.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IndexOptions.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, LoadOnly.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, NotSaved.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostLoad.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostPersist.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PreLoad.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PrePersist.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Property.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Reference.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Text.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Transient.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Validation.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Version.class));
     }
 
     @NotNull

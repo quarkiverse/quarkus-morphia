@@ -27,6 +27,24 @@ public class MorphiaResourceTest {
     }
 
     @Test()
+    public void testIndexing() {
+        given()
+                .when().get("/morphia/index")
+                .then()
+                .statusCode(200)
+                .body(is("_id_, title_text, published_1"));
+    }
+
+    @Test()
+    public void testValidation() {
+        given()
+                .when().get("/morphia/validation")
+                .then()
+                .statusCode(200)
+                .body(is("true"));
+    }
+
+    @Test()
     public void testPersist() {
         Book book = new Book("The Eye of the World");
         book.author = new Author("Robert Jordan");
