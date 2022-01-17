@@ -12,10 +12,21 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.junit.DisabledOnNativeImage;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class MorphiaResourceTest {
+
+    @Test
+    @DisabledOnNativeImage("the entities aren't getting mapped in native so the caps aren't getting created.")
+    public void testCaps() {
+        given()
+                .when().get("/morphia/caps")
+                .then()
+                .statusCode(200)
+                .body(is("true"));
+    }
 
     @Test()
     public void testDatastoreConfig() {
@@ -33,15 +44,6 @@ public class MorphiaResourceTest {
                 .then()
                 .statusCode(200)
                 .body(is("_id_, title_text, published_1"));
-    }
-
-    @Test()
-    public void testValidation() {
-        given()
-                .when().get("/morphia/validation")
-                .then()
-                .statusCode(200)
-                .body(is("true"));
     }
 
     @Test()
@@ -70,5 +72,14 @@ public class MorphiaResourceTest {
                 .statusCode(200)
                 .body(containsString("Robert Jordan"));
 
+    }
+
+    @Test()
+    public void testValidation() {
+        given()
+                .when().get("/morphia/validation")
+                .then()
+                .statusCode(200)
+                .body(is("true"));
     }
 }

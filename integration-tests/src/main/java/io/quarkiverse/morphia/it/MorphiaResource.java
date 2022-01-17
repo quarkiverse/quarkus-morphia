@@ -17,6 +17,7 @@
 package io.quarkiverse.morphia.it;
 
 import static dev.morphia.query.experimental.filters.Filters.eq;
+import static java.lang.Boolean.TRUE;
 import static java.util.List.of;
 
 import java.util.ArrayList;
@@ -56,6 +57,32 @@ public class MorphiaResource {
     }
 
     @GET
+    @Path("/caps")
+    public Response cappedCollections() {
+        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
+        datastore.getDatabase().drop();
+        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
+        datastore.getMapper().mapPackageFromClass(Book.class);
+        print("*************** entities = " + datastore.getMapper().getMappedEntities());
+        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
+        //        datastore.enableDocumentValidation();
+        //        System.out.println(
+        //                "*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
+        datastore.ensureCaps();
+        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
+        print("*************** entities = " + datastore.getMapper().getMappedEntities());
+
+        Document options = getOptions();
+        Boolean capped = options.getBoolean("capped");
+        return Response.ok(TRUE.equals(capped) && options.get("max").equals(100)).build();
+    }
+
+    private void print(String datastore) {
+        System.out.println(
+                datastore);
+    }
+
+    @GET
     @Produces("application/text")
     public String databaseName() {
         return datastore.getDatabase().getName();
@@ -66,14 +93,7 @@ public class MorphiaResource {
     public Response documentValidation() {
         datastore.enableDocumentValidation();
 
-        Document result = datastore.getDatabase().runCommand(
-                new Document("listCollections", 1)
-                        .append("filter", new Document("name", "books")));
-        Document cursor = (Document) result.get("cursor");
-        List<Document> firstBatch = (List<Document>) cursor.get("firstBatch");
-        Document document = firstBatch.get(0);
-
-        Document options = (Document) document.get("options");
+        Document options = getOptions();
         Document validator = (Document) options.get("validator");
         return Response.ok(validator != null && validator.get("name") != null).build();
 
@@ -121,6 +141,21 @@ public class MorphiaResource {
         book.title = "The Eye of the World";
         datastore.save(of(book));
         return datastore.find(Book.class).filter(eq("_id", book.id)).first();
+    }
+
+    @SuppressWarnings("unchecked")
+    private Document getOptions() {
+        Document result = datastore.getDatabase().runCommand(
+                new Document("listCollections", 1)
+                        .append("filter", new Document("name", "books")));
+        Document cursor = (Document) result.get("cursor");
+        print("---- cursor = " + cursor);
+        List<Document> firstBatch = (List<Document>) cursor.get("firstBatch");
+        print("---- firstBatch = " + firstBatch);
+        Document document = firstBatch.get(0);
+
+        Document options = (Document) document.get("options");
+        return options;
     }
 
 }

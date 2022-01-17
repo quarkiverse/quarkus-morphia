@@ -94,7 +94,6 @@ public class MorphiaProcessor {
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, CappedAt.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Collation.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Converters.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, dev.morphia.annotations.Index.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Embedded.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Entity.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, EntityListeners.class));
@@ -102,8 +101,8 @@ public class MorphiaProcessor {
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Handler.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Id.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IdGetter.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Index.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexed.class));
+        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, dev.morphia.annotations.Index.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexes.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IndexOptions.class));
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, LoadOnly.class));

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.bson.types.ObjectId;
 
+import dev.morphia.annotations.CappedAt;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Field;
 import dev.morphia.annotations.Id;
@@ -15,7 +16,7 @@ import dev.morphia.annotations.Reference;
 import dev.morphia.annotations.Validation;
 import dev.morphia.utils.IndexType;
 
-@Entity("books")
+@Entity(value = "books", cap = @CappedAt(count = 100))
 @Validation("{ name: { $exists:  true } }")
 @Indexes(value = @Index(fields = @Field(value = "title", type = IndexType.TEXT)))
 public class Book {
