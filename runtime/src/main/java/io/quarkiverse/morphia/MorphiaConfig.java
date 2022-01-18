@@ -45,19 +45,19 @@ public class MorphiaConfig {
     /**
      * Create collection caps.
      */
-    @ConfigItem(name = "create.caps")
+    @ConfigItem
     public boolean createCaps = false;
 
     /**
      * Create mapped indexes.
      */
-    @ConfigItem(name = "create.indexes")
+    @ConfigItem
     public boolean createIndexes = false;
 
     /**
      * Enable mapped document validation.
      */
-    @ConfigItem(name = "create.validators")
+    @ConfigItem
     public boolean createValidators = false;
 
     /**
@@ -72,7 +72,7 @@ public class MorphiaConfig {
      *
      * @see DateStorage
      */
-    @ConfigItem(defaultValue = "UTC")
+    @ConfigItem(defaultValue = "utc")
     public DateStorage dateStorage = DateStorage.UTC;
 
     /**
@@ -106,7 +106,7 @@ public class MorphiaConfig {
     /**
      * Should final properties be serialized
      */
-    @ConfigItem(defaultValue = "false")
+    @ConfigItem(defaultValue = "true")
     public boolean ignoreFinals;
 
     /**
@@ -116,12 +116,13 @@ public class MorphiaConfig {
     public boolean mapSubPackages;
 
     /**
-     * If true, any types annotated with {@code @Entity} or {@code @Embedded} will be mapped automatically.
+     * If true, any types annotated with {@code @Entity} or {@code @Embedded} will be mapped automatically. If this is set to
+     * false, then quarkus-morphia will not attempt to create collection caps, indexes, or document validations.
      * 
      * @see Entity
      * @see Embedded
      */
-    @ConfigItem(name = "map.entities", defaultValue = "true")
+    @ConfigItem(defaultValue = "true")
     public boolean mapEntities = true;
 
     /**
