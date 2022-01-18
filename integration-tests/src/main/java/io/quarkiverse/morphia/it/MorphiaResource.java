@@ -17,6 +17,7 @@
 package io.quarkiverse.morphia.it;
 
 import static dev.morphia.query.experimental.filters.Filters.eq;
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.List.of;
 
@@ -50,6 +51,7 @@ public class MorphiaResource {
 
     @POST
     @Consumes("application/json")
+    @Produces("application/text")
     public Response addBook(Book book) {
         datastore.save(book.author);
         datastore.save(book);
@@ -58,28 +60,19 @@ public class MorphiaResource {
 
     @GET
     @Path("/caps")
+    @Produces("application/text")
     public Response cappedCollections() {
-        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
-        datastore.getDatabase().drop();
-        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
-        datastore.getMapper().mapPackageFromClass(Book.class);
-        print("*************** entities = " + datastore.getMapper().getMappedEntities());
-        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
-        //        datastore.enableDocumentValidation();
-        //        System.out.println(
-        //                "*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
-        datastore.ensureCaps();
-        print("*************** collections = " + datastore.getDatabase().listCollectionNames().into(new ArrayList<>()));
-        print("*************** entities = " + datastore.getMapper().getMappedEntities());
-
-        Document options = getOptions();
+        Document options = getOptions("authors");
         Boolean capped = options.getBoolean("capped");
-        return Response.ok(TRUE.equals(capped) && options.get("max").equals(100)).build();
+        Integer max = options.getInteger("max");
+        return Response.ok(TRUE.equals(capped) && max.equals(100)).build();
     }
 
-    private void print(String datastore) {
-        System.out.println(
-                datastore);
+    @GET
+    @Path("/mapping")
+    @Produces("application/text")
+    public Response mapping() {
+        return Response.ok(FALSE.equals(datastore.getMapper().getMappedEntities().isEmpty())).build();
     }
 
     @GET
@@ -90,17 +83,19 @@ public class MorphiaResource {
 
     @GET
     @Path("/validation")
+    @Produces("application/text")
     public Response documentValidation() {
         datastore.enableDocumentValidation();
 
-        Document options = getOptions();
+        Document options = getOptions("books");
         Document validator = (Document) options.get("validator");
-        return Response.ok(validator != null && validator.get("name") != null).build();
+        return Response.ok(validator != null && validator.get("title") != null).build();
 
     }
 
     @GET
     @Path("/all")
+    @Produces("application/json")
     public List<Book> getBooks() {
         return datastore.find(Book.class).iterator().toList();
     }
@@ -122,6 +117,7 @@ public class MorphiaResource {
 
     @GET
     @Path("/index")
+    @Produces("application/text")
     public Response index() {
         datastore.ensureIndexes();
 
@@ -144,18 +140,15 @@ public class MorphiaResource {
     }
 
     @SuppressWarnings("unchecked")
-    private Document getOptions() {
+    private Document getOptions(String collection) {
         Document result = datastore.getDatabase().runCommand(
                 new Document("listCollections", 1)
-                        .append("filter", new Document("name", "books")));
+                        .append("filter", new Document("name", collection)));
         Document cursor = (Document) result.get("cursor");
-        print("---- cursor = " + cursor);
         List<Document> firstBatch = (List<Document>) cursor.get("firstBatch");
-        print("---- firstBatch = " + firstBatch);
         Document document = firstBatch.get(0);
 
-        Document options = (Document) document.get("options");
-        return options;
+        return (Document) document.get("options");
     }
 
 }

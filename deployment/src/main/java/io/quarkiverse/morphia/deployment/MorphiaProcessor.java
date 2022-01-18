@@ -6,8 +6,10 @@ import static java.util.List.of;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
 
@@ -15,6 +17,7 @@ import org.bson.codecs.Codec;
 import org.jboss.jandex.ClassInfo;
 import org.jboss.jandex.DotName;
 import org.jboss.jandex.Index;
+import org.jboss.jandex.IndexView;
 import org.jboss.jandex.Indexer;
 import org.jboss.jandex.JarIndexer;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +49,6 @@ import dev.morphia.annotations.Text;
 import dev.morphia.annotations.Transient;
 import dev.morphia.annotations.Validation;
 import dev.morphia.annotations.Version;
-import dev.morphia.annotations.experimental.EmbeddedBuilder;
 import dev.morphia.mapping.codec.references.ReferenceCodec;
 import io.quarkiverse.morphia.MorphiaConfig;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
@@ -54,14 +56,17 @@ import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.mongodb.runtime.MongoClientRecorder;
 import io.quarkus.mongodb.runtime.MongodbConfig;
 
+@SuppressWarnings("removal")
 public class MorphiaProcessor {
     public static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
-            DotName.createSimple(EmbeddedBuilder.class.getName()));
+            DotName.createSimple(Embedded.class.getName()));
     private static final String FEATURE = "morphia";
 
     @BuildStep
@@ -69,22 +74,24 @@ public class MorphiaProcessor {
     public SyntheticBeanBuildItem datastoreRecorder(MongoClientRecorder clientRecorder,
             MongodbConfig mongodbConfig,
             MorphiaRecorder recorder,
-            MorphiaConfig config) {
+            MorphiaConfig config,
+            MorphiaEntitiesBuildItem entitiesBuildItem) {
 
         return SyntheticBeanBuildItem.configure(Datastore.class)
                 .scope(Singleton.class)
                 .supplier(recorder.datastoreSupplier(
-                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config))
+                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config,
+                        entitiesBuildItem.getNames()))
                 .setRuntimeInit()
                 .done();
     }
 
     @BuildStep
-    public void registerReflectiveItems(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) throws IOException {
+    public void registerReflectiveItems(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses,
+            BuildProducer<GeneratedResourceBuildItem> resourceItems) throws IOException {
         registerWrapperArrays(reflectiveClasses);
         Index index = indexJar();
         registerImplementors(index, reflectiveClasses, DotName.createSimple(Codec.class.getName()));
-        registerMappedTypes(index, reflectiveClasses);
         reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, ReferenceCodec.class));
         registerAnnotations(reflectiveClasses);
     }
@@ -133,12 +140,23 @@ public class MorphiaProcessor {
         registerSubclasses(index, reflectiveClasses, type);
     }
 
-    private void registerMappedTypes(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
+    @BuildStep
+    public MorphiaEntitiesBuildItem registerMappedTypes(CombinedIndexBuildItem indexBuildItem,
+            BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
+        ArrayList<String> list = new ArrayList<>();
+
+        IndexView index = indexBuildItem.getIndex();
         for (DotName annotation : MAPPED_TYPE_ANNOTATIONS) {
-            index.getKnownClasses().stream().filter(info -> info.classAnnotation(annotation) != null).forEach(info -> {
+            var classes = index.getKnownClasses().stream()
+                    .filter(info -> info.classAnnotation(annotation) != null)
+                    .collect(Collectors.toList());
+            classes.forEach(info -> {
                 reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, info.name().toString()));
+                list.add(info.name().toString());
             });
         }
+
+        return new MorphiaEntitiesBuildItem(list);
     }
 
     private void registerSubclasses(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses, DotName type) {

@@ -12,14 +12,21 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
-import io.quarkus.test.junit.DisabledOnNativeImage;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class MorphiaResourceTest {
 
     @Test
-    @DisabledOnNativeImage("the entities aren't getting mapped in native so the caps aren't getting created.")
+    public void testMapping() {
+        given()
+                .when().get("/morphia/mapping")
+                .then()
+                .statusCode(200)
+                .body(is("true"));
+    }
+
+    @Test
     public void testCaps() {
         given()
                 .when().get("/morphia/caps")

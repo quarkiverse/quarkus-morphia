@@ -4,10 +4,11 @@ import java.util.Objects;
 
 import org.bson.types.ObjectId;
 
+import dev.morphia.annotations.CappedAt;
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 
-@Entity
+@Entity(value = "authors", cap = @CappedAt(count = 100))
 public class Author {
     @Id
     public ObjectId id;
@@ -21,6 +22,11 @@ public class Author {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -30,11 +36,6 @@ public class Author {
         }
         Author author = (Author) o;
         return Objects.equals(id, author.id) && Objects.equals(name, author.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
     }
 
     @Override
