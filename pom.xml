@@ -8,7 +8,7 @@
   </parent>
   <groupId>io.quarkiverse.morphia</groupId>
   <artifactId>quarkus-morphia-parent</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Quarkus - Morphia - Parent</name>
   <modules>
@@ -64,8 +64,4 @@
       </modules>
     </profile>
   </profiles>
-
-  <scm>
-    <tag>0.1.0</tag>
-  </scm>
 </project>
