@@ -49,8 +49,7 @@ public class MorphiaConfig {
     public String database;
 
     /**
-     * Specifies how dates should be stored in the database. This value should only be changed to support legacy systems which
-     * use the {@link DateStorage#SYSTEM_DEFAULT} setting. New projects should use the default value.
+     * Specifies how dates should be stored in the database. This value should only be changed to support legacy systems which use the {@link DateStorage#SYSTEM_DEFAULT} setting. New projects should use the default value.
      *
      * @see DateStorage
      */
