@@ -51,6 +51,7 @@ import dev.morphia.annotations.Validation;
 import dev.morphia.annotations.Version;
 import dev.morphia.mapping.codec.references.ReferenceCodec;
 import io.quarkiverse.morphia.MorphiaConfig;
+import io.quarkiverse.morphia.MorphiaRecorder;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;

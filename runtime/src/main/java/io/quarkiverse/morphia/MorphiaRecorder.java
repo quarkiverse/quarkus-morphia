@@ -1,4 +1,4 @@
-package io.quarkiverse.morphia.deployment;
+package io.quarkiverse.morphia;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -7,7 +7,6 @@ import com.mongodb.client.MongoClient;
 
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
-import io.quarkiverse.morphia.MorphiaConfig;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
