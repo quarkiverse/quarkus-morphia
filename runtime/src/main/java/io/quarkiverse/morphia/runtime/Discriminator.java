@@ -1,4 +1,4 @@
-package io.quarkiverse.morphia;
+package io.quarkiverse.morphia.runtime;
 
 import static dev.morphia.mapping.DiscriminatorFunction.className;
 import static dev.morphia.mapping.DiscriminatorFunction.lowerClassName;

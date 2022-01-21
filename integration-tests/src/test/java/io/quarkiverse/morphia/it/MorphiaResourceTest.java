@@ -1,26 +1,25 @@
 package io.quarkiverse.morphia.it;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
-
+import io.quarkiverse.morphia.it.models.Author;
+import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.junit.QuarkusTest;
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
 
-import io.quarkiverse.morphia.it.models.Author;
-import io.quarkiverse.morphia.it.models.Book;
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
 
 @QuarkusTest
 public class MorphiaResourceTest {
 
     @Test
-    public void testMapping() {
+    public void testAlternates() {
         given()
-                .when().get("/morphia/mapping")
+                .when().get("/morphia/alternates")
                 .then()
                 .statusCode(200)
                 .body(is("true"));
@@ -51,6 +50,15 @@ public class MorphiaResourceTest {
                 .then()
                 .statusCode(200)
                 .body(is("_id_, title_text, published_1"));
+    }
+
+    @Test
+    public void testMapping() {
+        given()
+                .when().get("/morphia/mapping")
+                .then()
+                .statusCode(200)
+                .body(is("true"));
     }
 
     @Test()

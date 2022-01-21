@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 
 import org.bson.codecs.Codec;
 import org.jboss.jandex.ClassInfo;
@@ -53,6 +54,7 @@ import dev.morphia.mapping.codec.references.ReferenceCodec;
 import io.quarkiverse.morphia.MorphiaConfig;
 import io.quarkiverse.morphia.MorphiaRecorder;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
+import io.quarkus.arc.processor.DotNames;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -61,30 +63,63 @@ import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.mongodb.MongoClientName;
+import io.quarkus.mongodb.deployment.MongoClientNameBuildItem;
+import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
 import io.quarkus.mongodb.runtime.MongoClientRecorder;
 import io.quarkus.mongodb.runtime.MongodbConfig;
 
 @SuppressWarnings("removal")
 public class MorphiaProcessor {
-    public static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
+    private static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
             DotName.createSimple(Embedded.class.getName()));
     private static final String FEATURE = "morphia";
+    public static final DotName MONGO_CLIENT_NAME = DotName.createSimple(MongoClientName.class.getName());
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    public SyntheticBeanBuildItem datastoreRecorder(MongoClientRecorder clientRecorder,
+    public void datastoreRecorder(MongoClientRecorder clientRecorder,
             MongodbConfig mongodbConfig,
             MorphiaRecorder recorder,
             MorphiaConfig config,
-            MorphiaEntitiesBuildItem entitiesBuildItem) {
+            MorphiaEntitiesBuildItem entitiesBuildItem,
+            List<MongoClientNameBuildItem> mongoClientNames,
+            BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer) {
 
-        return SyntheticBeanBuildItem.configure(Datastore.class)
-                .scope(Singleton.class)
+        syntheticBeanBuildItemBuildProducer.produce(SyntheticBeanBuildItem
+                .configure(Datastore.class)
+                .scope(ApplicationScoped.class)
                 .supplier(recorder.datastoreSupplier(
                         clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config,
-                        entitiesBuildItem.getNames()))
+                        entitiesBuildItem.getNames(), DEFAULT_MONGOCLIENT_NAME))
                 .setRuntimeInit()
-                .done();
+                .done());
+
+        for (MongoClientNameBuildItem mongoClientName : mongoClientNames) {
+
+            String clientName = mongoClientName.getName();
+
+            SyntheticBeanBuildItem.ExtendedBeanConfigurator configurator = SyntheticBeanBuildItem
+                    .configure(Datastore.class)
+                    .scope(ApplicationScoped.class)
+                    .supplier(recorder.datastoreSupplier(
+                            clientRecorder.mongoClientSupplier(clientName, mongodbConfig), config,
+                            entitiesBuildItem.getNames(), clientName))
+                    .setRuntimeInit();
+
+            if (MongoClientBeanUtil.isDefault(clientName)) {
+                configurator.addQualifier(Default.class);
+            } else {
+                configurator.addQualifier().annotation(DotNames.NAMED).addValue("value", clientName).done();
+                if (mongoClientName.isAddQualifier()) {
+                    configurator.addQualifier().annotation(MONGO_CLIENT_NAME).addValue("value", clientName).done();
+                }
+            }
+
+            syntheticBeanBuildItemBuildProducer.produce(configurator.done());
+
+        }
+
     }
 
     @BuildStep

@@ -42,12 +42,28 @@ import dev.morphia.aggregation.experimental.stages.Lookup;
 import dev.morphia.aggregation.experimental.stages.Unwind;
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.mongodb.MongoClientName;
 
 @Path("/morphia")
 @ApplicationScoped
 public class MorphiaResource {
     @Inject
     Datastore datastore;
+
+    @Inject
+    @MongoClientName("alternate")
+    Datastore alternate;
+
+    @GET
+    @Path("alternates")
+    @Produces("application/text")
+    public Response alternates() {
+        return Response.ok(
+                datastore != alternate &&
+                        datastore.getDatabase().getName().equals("morphia-int-test") &&
+                        alternate.getDatabase().getName().equals("morphia-alternate"))
+                .build();
+    }
 
     @POST
     @Consumes("application/json")

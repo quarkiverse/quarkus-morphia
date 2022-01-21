@@ -7,13 +7,15 @@ import com.mongodb.client.MongoClient;
 
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
+import io.quarkiverse.morphia.runtime.MapperConfig;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class MorphiaRecorder {
     public Supplier<Datastore> datastoreSupplier(Supplier<MongoClient> mongoClientSupplier,
-            MorphiaConfig config, List<String> entities) {
+            MorphiaConfig morphiaConfig, List<String> entities, String clientName) {
         return () -> {
+            MapperConfig config = morphiaConfig.getMapperConfig(clientName);
             Datastore datastore = Morphia.createDatastore(mongoClientSupplier.get(), config.database, config.toMapperOptions());
             try {
                 if (config.mapEntities) {
