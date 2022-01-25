@@ -16,9 +16,7 @@ public class DatastoreTest {
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withConfigurationResource("test-logging.properties")
-            .overrideConfigKey("quarkus.morphia.database", "quarkus-morphia-test")
-            .overrideConfigKey("quarkus.morphia.alternate.database", "quarkus-alternate-test")
-            .overrideConfigKey("quarkus.mongodb.alternate.connection-string", "mongodb://127.0.0.1:27017")
+
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
     @Inject

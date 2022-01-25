@@ -1,6 +1,9 @@
 package io.quarkiverse.morphia.runtime;
 
 import static io.quarkiverse.morphia.runtime.Discriminator.simpleName;
+import static java.util.Collections.emptyList;
+
+import java.util.List;
 
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
@@ -90,14 +93,16 @@ public class MapperConfig {
     public boolean ignoreFinals;
 
     /**
-     * If true, any types annotated with {@code @Entity} or {@code @Embedded} will be mapped automatically. If this is set to
-     * false, then quarkus-morphia will not attempt to create collection caps, indexes, or document validations.
+     * List the packages to automatically map. To map any subpackages, simply include {@code .*} on the end of the name. e.g.
+     * otherwise the package name will be matched exactly against the declared package for a class. If this item is
+     * missing/empty, no
+     * automatic mapping will be performed.
      *
      * @see Entity
      * @see Embedded
      */
-    @ConfigItem(defaultValue = "true")
-    public boolean mapEntities = true;
+    @ConfigItem
+    public List<String> packages = emptyList();
 
     /**
      * Should "subpackages" also be mapped when mapping a specific package

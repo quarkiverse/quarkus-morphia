@@ -17,7 +17,6 @@
 package io.quarkiverse.morphia.it;
 
 import static dev.morphia.query.experimental.filters.Filters.eq;
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.util.List.of;
 
@@ -40,6 +39,7 @@ import org.bson.Document;
 import dev.morphia.Datastore;
 import dev.morphia.aggregation.experimental.stages.Lookup;
 import dev.morphia.aggregation.experimental.stages.Unwind;
+import dev.morphia.mapping.codec.pojo.EntityModel;
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
 import io.quarkus.mongodb.MongoClientName;
@@ -88,7 +88,17 @@ public class MorphiaResource {
     @Path("/mapping")
     @Produces("application/text")
     public Response mapping() {
-        return Response.ok(FALSE.equals(datastore.getMapper().getMappedEntities().isEmpty())).build();
+        boolean correct = datastore.getMapper().getMappedEntities().stream()
+                .map(EntityModel::getName).sorted()
+                .collect(Collectors.toList())
+                .equals(List.of("Author", "Book"));
+
+        correct &= alternate.getMapper().getMappedEntities().stream()
+                .map(EntityModel::getName).sorted()
+                .collect(Collectors.toList())
+                .equals(List.of("Author", "Book", "Car", "Moto", "Vehicle"));
+
+        return Response.ok(correct).build();
     }
 
     @GET

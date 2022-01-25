@@ -2,6 +2,7 @@ package io.quarkiverse.morphia;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 import com.mongodb.client.MongoClient;
 
@@ -18,20 +19,25 @@ public class MorphiaRecorder {
             MapperConfig config = morphiaConfig.getMapperConfig(clientName);
             Datastore datastore = Morphia.createDatastore(mongoClientSupplier.get(), config.database, config.toMapperOptions());
             try {
-                if (config.mapEntities) {
+                if (!config.packages.isEmpty()) {
                     ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                    for (String type : entities) {
-                        datastore.getMapper().map(contextClassLoader.loadClass(type));
+                    for (String mapPackage : config.packages) {
+                        Pattern pattern = Pattern.compile(mapPackage.endsWith(".*") ? mapPackage : mapPackage + ".[A-Z]+");
+                        for (String type : entities) {
+                            if (pattern.matcher(type).matches()) {
+                                datastore.getMapper().map(contextClassLoader.loadClass(type));
+                            }
+                        }
                     }
-                }
-                if (config.createValidators) {
-                    datastore.enableDocumentValidation();
-                }
-                if (config.createCaps) {
-                    datastore.ensureCaps();
-                }
-                if (config.createIndexes) {
-                    datastore.ensureIndexes();
+                    if (config.createValidators) {
+                        datastore.enableDocumentValidation();
+                    }
+                    if (config.createCaps) {
+                        datastore.ensureCaps();
+                    }
+                    if (config.createIndexes) {
+                        datastore.ensureIndexes();
+                    }
                 }
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e.getMessage(), e);

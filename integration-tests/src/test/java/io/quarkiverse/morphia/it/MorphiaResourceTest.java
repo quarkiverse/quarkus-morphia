@@ -1,17 +1,18 @@
 package io.quarkiverse.morphia.it;
 
-import io.quarkiverse.morphia.it.models.Author;
-import io.quarkiverse.morphia.it.models.Book;
-import io.quarkus.test.junit.QuarkusTest;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isA;
+
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isA;
+import io.quarkiverse.morphia.it.models.Author;
+import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class MorphiaResourceTest {
