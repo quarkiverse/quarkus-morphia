@@ -24,7 +24,7 @@ public class MorphiaRecorder {
                     for (String mapPackage : config.packages) {
                         Pattern pattern = Pattern.compile(mapPackage.endsWith(".*") ? mapPackage : mapPackage + ".[A-Z]+");
                         for (String type : entities) {
-                            if (pattern.matcher(type).matches()) {
+                            if (pattern.matcher(type).lookingAt()) {
                                 datastore.getMapper().map(contextClassLoader.loadClass(type));
                             }
                         }

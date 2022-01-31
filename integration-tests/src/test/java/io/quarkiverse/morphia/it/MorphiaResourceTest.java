@@ -12,9 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.mongodb.MongoTestResource;
 
 @QuarkusTest
+@QuarkusTestResource(MongoTestResource.class)
 public class MorphiaResourceTest {
 
     @Test
