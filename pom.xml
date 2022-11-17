@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.quarkiverse</groupId>
     <artifactId>quarkiverse-parent</artifactId>
-    <version>9</version>
+    <version>11</version>
   </parent>
   <groupId>io.quarkiverse.morphia</groupId>
   <artifactId>quarkus-morphia-parent</artifactId>
@@ -23,6 +23,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.version>999-SNAPSHOT</quarkus.version>
+    <morphia.version>2.2.9</morphia.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -32,6 +33,11 @@
         <version>${quarkus.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>dev.morphia.morphia</groupId>
+        <artifactId>morphia-core</artifactId>
+        <version>${morphia.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

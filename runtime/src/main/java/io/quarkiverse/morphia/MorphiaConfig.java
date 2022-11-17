@@ -9,7 +9,6 @@ import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
-@SuppressWarnings("deprecation")
 @ConfigRoot(name = "morphia", phase = RUN_TIME)
 public class MorphiaConfig {
     /**
@@ -23,14 +22,14 @@ public class MorphiaConfig {
      * <p>
      * each cluster have a unique identifier witch must be identified to select the right connection.
      * example:
-     * 
+     *
      * <pre>
      * {@code
      * quarkus.morphia.cluster1.discriminatorKey = className
      * quarkus.morphia.cluster2.discriminatorKey = _type
      * }
      * </pre>
-     * 
+     *
      * And then use annotations above the instances of {@code @MongoClient} to indicate which instance we are going to use
      *
      * <pre>
