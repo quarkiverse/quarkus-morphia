@@ -1,6 +1,6 @@
 package io.quarkiverse.morphia.it.mongodb;
 
-import static dev.morphia.query.experimental.filters.Filters.eq;
+import static dev.morphia.query.filters.Filters.eq;
 
 import java.util.List;
 

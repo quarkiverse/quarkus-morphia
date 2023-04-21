@@ -145,7 +145,7 @@ public class MapperConfig {
                 .discriminator(discriminator.convert())
                 .discriminatorKey(discriminatorKey)
                 .enablePolymorphicQueries(enablePolymorphicQueries)
-                .ignoreFinals(this.ignoreFinals)
+                .ignoreFinals(ignoreFinals)
                 .mapSubPackages(mapSubPackages)
                 .propertyDiscovery(propertyDiscovery)
                 .propertyNaming(propertyNaming.convert())

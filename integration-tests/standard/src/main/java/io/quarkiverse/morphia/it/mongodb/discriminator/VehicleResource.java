@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -19,6 +20,7 @@ import io.smallrye.common.annotation.Blocking;
 @Blocking
 public class VehicleResource {
     @Inject
+    @Default
     Datastore datastore;
 
     @GET

@@ -16,7 +16,7 @@
  */
 package io.quarkiverse.morphia.it;
 
-import static dev.morphia.query.experimental.filters.Filters.eq;
+import static dev.morphia.query.filters.Filters.eq;
 import static java.lang.Boolean.TRUE;
 import static java.util.List.of;
 
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -37,8 +38,8 @@ import javax.ws.rs.core.Response;
 import org.bson.Document;
 
 import dev.morphia.Datastore;
-import dev.morphia.aggregation.experimental.stages.Lookup;
-import dev.morphia.aggregation.experimental.stages.Unwind;
+import dev.morphia.aggregation.stages.Lookup;
+import dev.morphia.aggregation.stages.Unwind;
 import dev.morphia.mapping.codec.pojo.EntityModel;
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
@@ -48,6 +49,7 @@ import io.quarkus.mongodb.MongoClientName;
 @ApplicationScoped
 public class MorphiaResource {
     @Inject
+    @Default
     Datastore datastore;
 
     @Inject
@@ -147,7 +149,7 @@ public class MorphiaResource {
     public Response index() {
         datastore.ensureIndexes();
 
-        return Response.ok(datastore.getMapper().getCollection(Book.class)
+        return Response.ok(datastore.getCollection(Book.class)
                 .listIndexes()
                 .into(new ArrayList<>()).stream()
                 .map(index -> index.get("name").toString())
