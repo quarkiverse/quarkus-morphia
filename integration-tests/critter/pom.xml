@@ -116,7 +116,7 @@
             <plugin>
                 <groupId>dev.morphia.critter</groupId>
                 <artifactId>critter-maven</artifactId>
-                <version>4.3.0</version>
+                <version>${critter.version}</version>
                 <executions>
                     <execution>
                         <id>critter</id>
@@ -126,8 +126,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <force>false</force>
-                    <outputType>java</outputType>
+<!--                    <force>false</force>-->
+<!--                    <outputType>java</outputType>-->
                     <sourceDirectories>
                         <directory>src/common/java</directory>
                     </sourceDirectories>

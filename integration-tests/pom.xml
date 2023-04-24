@@ -16,6 +16,19 @@
     </properties>
     <modules>
         <module>standard</module>
-<!--        <module>critter</module>-->
     </modules>
+    
+    <profiles>
+        <profile>
+            <id>critter</id>
+            <activation>
+                <property>
+                    <name>critter</name>
+                </property>
+            </activation>
+            <modules>
+                <module>critter</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
