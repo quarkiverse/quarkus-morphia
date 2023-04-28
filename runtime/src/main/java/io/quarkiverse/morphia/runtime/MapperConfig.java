@@ -18,6 +18,13 @@ import io.quarkus.runtime.annotations.ConfigItem;
 @ConfigGroup
 public class MapperConfig {
     /**
+     * If critter is present, auto import the generated model information created by
+     * <a href="https://morphia.dev/critter/4.4/index.html">critter</a>.
+     */
+    @ConfigItem(defaultValue = "false")
+    public boolean autoImportModels = false;
+
+    /**
      * The strategy to use when calculating collection names for entities without an explicitly mapped collection name.
      *
      * @see Entity
@@ -139,7 +146,9 @@ public class MapperConfig {
     public boolean storeNulls;
 
     public MapperOptions toMapperOptions() {
+        System.out.println("************** autoImportModels = " + autoImportModels);
         return MapperOptions.builder()
+                .autoImportModels(autoImportModels)
                 .collectionNaming(collectionNaming.convert())
                 .dateStorage(dateStorage)
                 .discriminator(discriminator.convert())

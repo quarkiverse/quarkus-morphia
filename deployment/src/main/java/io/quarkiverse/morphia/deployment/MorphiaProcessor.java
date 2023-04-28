@@ -73,7 +73,7 @@ import io.quarkus.mongodb.runtime.MongodbConfig;
 public class MorphiaProcessor {
     private static final List<DotName> MAPPED_TYPE_ANNOTATIONS = of(DotName.createSimple(Entity.class.getName()),
             DotName.createSimple(Embedded.class.getName()));
-    private static final String FEATURE = "morphia";
+    private static final String FEATURE = "quarkus-morphia";
     public static final DotName MONGO_CLIENT_NAME = DotName.createSimple(MongoClientName.class.getName());
 
     @BuildStep

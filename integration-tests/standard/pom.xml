@@ -21,7 +21,6 @@
         <dependency>
             <groupId>io.quarkiverse.morphia</groupId>
             <artifactId>quarkus-morphia</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

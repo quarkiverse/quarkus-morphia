@@ -20,6 +20,7 @@ import static dev.morphia.query.filters.Filters.eq;
 import static java.lang.Boolean.TRUE;
 import static java.util.List.of;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.bson.Document;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.morphia.Datastore;
 import dev.morphia.aggregation.stages.Lookup;
@@ -89,10 +92,21 @@ public class MorphiaResource {
     @GET
     @Path("/mapping")
     @Produces("application/text")
-    public Response mapping() {
-        boolean correct = datastore.getMapper().getMappedEntities().stream()
+    public Response mapping() throws IOException {
+        List<String> collect = datastore.getMapper().getMappedEntities().stream()
                 .map(EntityModel::getName).sorted()
-                .collect(Collectors.toList())
+                .collect(Collectors.toList());
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("************** collect = " + collect);
+        System.out.println("datastore.getMapper().getOptions() = " + datastore.getMapper().getOptions());
+        new ObjectMapper().writer().writeValue(System.out, datastore.getMapper().getOptions());
+        boolean correct = collect
                 .equals(List.of("Author", "Book"));
 
         correct &= alternate.getMapper().getMappedEntities().stream()

@@ -19,19 +19,59 @@ import dev.morphia.utils.IndexType;
 @Validation("{ title: { $exists:  true } }")
 @Indexes(value = @Index(fields = @Field(value = "title", type = IndexType.TEXT)))
 public class Book {
-    @Id
-    public ObjectId id;
-    public String title;
-    @Indexed
-    public LocalDate published;
     @Reference(idOnly = true)
     public Author author;
+
+    @Id
+    public ObjectId id;
+
+    @Indexed
+    public LocalDate published;
+
+    public String title;
 
     public Book() {
     }
 
     public Book(String title) {
         this.title = title;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public LocalDate getPublished() {
+        return published;
+    }
+
+    public void setPublished(LocalDate published) {
+        this.published = published;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, published, author);
     }
 
     @Override
@@ -45,11 +85,6 @@ public class Book {
         Book book = (Book) o;
         return Objects.equals(id, book.id) && Objects.equals(title, book.title) &&
                 Objects.equals(published, book.published) && Objects.equals(author, book.author);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, published, author);
     }
 
     @Override
