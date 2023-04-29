@@ -17,7 +17,7 @@
         <module>deployment</module>
     </modules>
     <properties>
-        <critter.version>4.4.2-SNAPSHOT</critter.version>
+        <critter.version>4.4.2</critter.version>
         <quarkus.version>2.16.6.Final</quarkus.version>
         <morphia.version>2.3.1</morphia.version>
 
