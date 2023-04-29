@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.mongodb.MongoTestResource;
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
@@ -12,9 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.mongodb.MongoTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(MongoTestResource.class)
@@ -27,14 +27,6 @@ public class MorphiaResourceTest {
                 .then()
                 .statusCode(200)
                 .body(is("true"));
-    }
-
-    @Test
-    public void dummy() {
-        given()
-                .when().get("/dummy")
-                .then()
-                .statusCode(200);
     }
 
     @Test
@@ -70,7 +62,25 @@ public class MorphiaResourceTest {
                 .when().get("/morphia/mapping")
                 .then()
                 .statusCode(200)
-                .body(is("true"));
+                .body(is("Author, Book"));
+    }
+
+    @Test
+    public void testAlternateMapping() {
+        given()
+                .when().get("/morphia/alternateMapping")
+                .then()
+                .statusCode(200)
+                .body(is("Author, Book, Car, Moto, Vehicle"));
+    }
+
+    @Test
+    public void testCritterMapping() {
+        given()
+                .when().get("/morphia/critterMapping")
+                .then()
+                .statusCode(200)
+                .body(is("Author, Book, Car, Moto, Vehicle"));
     }
 
     @Test()

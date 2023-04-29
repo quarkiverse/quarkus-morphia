@@ -63,6 +63,7 @@ import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ServiceProviderBuildItem;
 import io.quarkus.mongodb.MongoClientName;
 import io.quarkus.mongodb.deployment.MongoClientNameBuildItem;
 import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
@@ -75,6 +76,7 @@ public class MorphiaProcessor {
             DotName.createSimple(Embedded.class.getName()));
     private static final String FEATURE = "quarkus-morphia";
     public static final DotName MONGO_CLIENT_NAME = DotName.createSimple(MongoClientName.class.getName());
+    private static final String ENTITY_MODEL_IMPORTER = "dev.morphia.mapping.EntityModelImporter";
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
@@ -84,7 +86,8 @@ public class MorphiaProcessor {
             MorphiaConfig config,
             MorphiaEntitiesBuildItem entitiesBuildItem,
             List<MongoClientNameBuildItem> mongoClientNames,
-            BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer) {
+            BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
+            BuildProducer<ServiceProviderBuildItem> items) {
 
         syntheticBeanBuildItemBuildProducer.produce(SyntheticBeanBuildItem
                 .configure(Datastore.class)
@@ -117,9 +120,8 @@ public class MorphiaProcessor {
             }
 
             syntheticBeanBuildItemBuildProducer.produce(configurator.done());
-
         }
-
+        items.produce(ServiceProviderBuildItem.allProvidersFromClassPath(ENTITY_MODEL_IMPORTER));
     }
 
     @BuildStep

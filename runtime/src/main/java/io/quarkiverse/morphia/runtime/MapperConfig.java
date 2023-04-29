@@ -1,9 +1,9 @@
 package io.quarkiverse.morphia.runtime;
 
 import static io.quarkiverse.morphia.runtime.Discriminator.simpleName;
-import static java.util.Collections.emptyList;
 
 import java.util.List;
+import java.util.Optional;
 
 import dev.morphia.annotations.Embedded;
 import dev.morphia.annotations.Entity;
@@ -102,14 +102,13 @@ public class MapperConfig {
     /**
      * List the packages to automatically map. To map any subpackages, simply include {@code .*} on the end of the name. e.g.
      * otherwise the package name will be matched exactly against the declared package for a class. If this item is
-     * missing/empty, no
-     * automatic mapping will be performed.
+     * missing/empty, no automatic mapping will be performed.
      *
      * @see Entity
      * @see Embedded
      */
     @ConfigItem
-    public List<String> packages = emptyList();
+    public Optional<List<String>> packages;
 
     /**
      * Should "subpackages" also be mapped when mapping a specific package
@@ -146,7 +145,6 @@ public class MapperConfig {
     public boolean storeNulls;
 
     public MapperOptions toMapperOptions() {
-        System.out.println("************** autoImportModels = " + autoImportModels);
         return MapperOptions.builder()
                 .autoImportModels(autoImportModels)
                 .collectionNaming(collectionNaming.convert())

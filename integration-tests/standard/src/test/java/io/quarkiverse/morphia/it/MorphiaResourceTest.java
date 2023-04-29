@@ -62,7 +62,16 @@ public class MorphiaResourceTest {
                 .when().get("/morphia/mapping")
                 .then()
                 .statusCode(200)
-                .body(is("true"));
+                .body(is("Author, Book"));
+    }
+
+    @Test
+    public void testAlternateMapping() {
+        given()
+                .when().get("/morphia/alternateMapping")
+                .then()
+                .statusCode(200)
+                .body(is("Author, Book, Car, Moto, Vehicle"));
     }
 
     @Test()

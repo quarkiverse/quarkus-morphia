@@ -18,10 +18,10 @@ public class MorphiaRecorder {
         return () -> {
             MapperConfig config = morphiaConfig.getMapperConfig(clientName);
             Datastore datastore = Morphia.createDatastore(mongoClientSupplier.get(), config.database, config.toMapperOptions());
-            try {
-                if (!config.packages.isEmpty()) {
-                    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-                    for (String mapPackage : config.packages) {
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            config.packages.ifPresent(packages -> {
+                try {
+                    for (String mapPackage : packages) {
                         Pattern pattern = Pattern.compile(mapPackage.endsWith(".*") ? mapPackage : mapPackage + ".[A-Z]+");
                         for (String type : entities) {
                             if (pattern.matcher(type).lookingAt()) {
@@ -29,19 +29,19 @@ public class MorphiaRecorder {
                             }
                         }
                     }
-                    if (config.createValidators) {
-                        datastore.enableDocumentValidation();
-                    }
-                    if (config.createCaps) {
-                        datastore.ensureCaps();
-                    }
-                    if (config.createIndexes) {
-                        datastore.ensureIndexes();
-                    }
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e.getMessage(), e);
                 }
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e.getMessage(), e);
-            }
+                if (config.createValidators) {
+                    datastore.enableDocumentValidation();
+                }
+                if (config.createCaps) {
+                    datastore.ensureCaps();
+                }
+                if (config.createIndexes) {
+                    datastore.ensureIndexes();
+                }
+            });
             return datastore;
         };
     }
