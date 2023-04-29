@@ -5,8 +5,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.mongodb.MongoTestResource;
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
@@ -14,7 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.mongodb.MongoTestResource;
 
 @QuarkusTest
 @QuarkusTestResource(MongoTestResource.class)
