@@ -1,4 +1,4 @@
-name: quarkus-morphia
+name: Morphia
 description: Advanced MongoDB support via Morphia
 metadata:
   keywords:
