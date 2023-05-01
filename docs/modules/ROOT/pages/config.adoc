@@ -1,112 +1,566 @@
-//
-// This content is generated using mvn compile and copied manually to here
-//
+
+:summaryTableId: quarkus-morphia
 [.configuration-legend]
 icon:lock[title=Fixed at build time] Configuration property fixed at build time - All other configuration properties are overridable at runtime
 [.configuration-reference.searchable, cols="80,.^10,.^10"]
 |===
 
-h|[[quarkus-freemarker_configuration]]link:#quarkus-freemarker_configuration[Configuration property]
+h|[[quarkus-morphia_configuration]]link:#quarkus-morphia_configuration[Configuration property]
 
 h|Type
 h|Default
 
-a|icon:lock[title=Fixed at build time] [[quarkus-freemarker_quarkus.freemarker.resource-paths]]`link:#quarkus-freemarker_quarkus.freemarker.resource-paths[quarkus.freemarker.resource-paths]`
+a| [[quarkus-morphia_quarkus.morphia.auto-import-models]]`link:#quarkus-morphia_quarkus.morphia.auto-import-models[quarkus.morphia.auto-import-models]`
 
 [.description]
 --
-Comma-separated list of absolute resource paths to scan recursively for templates. All tree folder from 'resource-paths' will be added as a resource. Unprefixed locations or locations starting with classpath will be processed in the same way.
+If critter is present, auto import the generated model information created by link:https://morphia.dev/critter/4.4/index.html[critter].
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_AUTO_IMPORT_MODELS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_AUTO_IMPORT_MODELS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.collection-naming]]`link:#quarkus-morphia_quarkus.morphia.collection-naming[quarkus.morphia.collection-naming]`
+
+[.description]
+--
+The strategy to use when calculating collection names for entities without an explicitly mapped collection name.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_COLLECTION_NAMING+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_COLLECTION_NAMING+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`identity`, `lower-case`, `snake-case`, `camel-case`, `kebab-case`
+|`camel-case`
+
+
+a| [[quarkus-morphia_quarkus.morphia.create-caps]]`link:#quarkus-morphia_quarkus.morphia.create-caps[quarkus.morphia.create-caps]`
+
+[.description]
+--
+Create collection caps.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_CREATE_CAPS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_CREATE_CAPS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.create-indexes]]`link:#quarkus-morphia_quarkus.morphia.create-indexes[quarkus.morphia.create-indexes]`
+
+[.description]
+--
+Create mapped indexes.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_CREATE_INDEXES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_CREATE_INDEXES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.create-validators]]`link:#quarkus-morphia_quarkus.morphia.create-validators[quarkus.morphia.create-validators]`
+
+[.description]
+--
+Enable mapped document validation.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_CREATE_VALIDATORS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_CREATE_VALIDATORS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.database]]`link:#quarkus-morphia_quarkus.morphia.database[quarkus.morphia.database]`
+
+[.description]
+--
+The database to use
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_DATABASE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_DATABASE+++`
+endif::add-copy-button-to-env-var[]
+--|string
+|required icon:exclamation-circle[title=Configuration property is required]
+
+
+a| [[quarkus-morphia_quarkus.morphia.date-storage]]`link:#quarkus-morphia_quarkus.morphia.date-storage[quarkus.morphia.date-storage]`
+
+[.description]
+--
+Specifies how dates should be stored in the database. This value should only be changed to support legacy systems which use the `DateStorage++#++SYSTEM_DEFAULT` setting. New projects should use the default value.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_DATE_STORAGE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_DATE_STORAGE+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`utc`, `system-default`
+|`utc`
+
+
+a| [[quarkus-morphia_quarkus.morphia.discriminator]]`link:#quarkus-morphia_quarkus.morphia.discriminator[quarkus.morphia.discriminator]`
+
+[.description]
+--
+The function to use when calculating an entity's discriminator value. Possible values include:   built-in functions defined on `DiscriminatorFunction`   the class names of a type extending `DiscriminatorFunction`
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_DISCRIMINATOR+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_DISCRIMINATOR+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`class-name`, `lower-class-name`, `lower-simple-name`, `simple-name`
+|`simple-name`
+
+
+a| [[quarkus-morphia_quarkus.morphia.discriminator-key]]`link:#quarkus-morphia_quarkus.morphia.discriminator-key[quarkus.morphia.discriminator-key]`
+
+[.description]
+--
+The key to use when storing an entity's discriminator value
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_DISCRIMINATOR_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_DISCRIMINATOR_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string
+|`_t`
+
+
+a| [[quarkus-morphia_quarkus.morphia.enable-polymorphic-queries]]`link:#quarkus-morphia_quarkus.morphia.enable-polymorphic-queries[quarkus.morphia.enable-polymorphic-queries]`
+
+[.description]
+--
+Should queries be updated to include subtypes when querying for a specific type
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_ENABLE_POLYMORPHIC_QUERIES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_ENABLE_POLYMORPHIC_QUERIES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`true`
+
+
+a| [[quarkus-morphia_quarkus.morphia.ignore-finals]]`link:#quarkus-morphia_quarkus.morphia.ignore-finals[quarkus.morphia.ignore-finals]`
+
+[.description]
+--
+Should final properties be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_IGNORE_FINALS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_IGNORE_FINALS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`true`
+
+
+a| [[quarkus-morphia_quarkus.morphia.packages]]`link:#quarkus-morphia_quarkus.morphia.packages[quarkus.morphia.packages]`
+
+[.description]
+--
+List the packages to automatically map. To map any subpackages, simply include `.++*++` on the end of the name. e.g. otherwise the package name will be matched exactly against the declared package for a class. If this item is missing/empty, no automatic mapping will be performed.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_PACKAGES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_PACKAGES+++`
+endif::add-copy-button-to-env-var[]
 --|list of string
-|`freemarker/templates`
+|
 
 
-a| [[quarkus-freemarker_quarkus.freemarker.file-paths]]`link:#quarkus-freemarker_quarkus.freemarker.file-paths[quarkus.freemarker.file-paths]`
+a| [[quarkus-morphia_quarkus.morphia.map-sub-packages]]`link:#quarkus-morphia_quarkus.morphia.map-sub-packages[quarkus.morphia.map-sub-packages]`
 
 [.description]
 --
-Comma-separated of file system paths where freemarker templates are located
+Should "subpackages" also be mapped when mapping a specific package
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_MAP_SUB_PACKAGES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_MAP_SUB_PACKAGES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.property-discovery]]`link:#quarkus-morphia_quarkus.morphia.property-discovery[quarkus.morphia.property-discovery]`
+
+[.description]
+--
+Specifies how properties of an entity are discovered.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_PROPERTY_DISCOVERY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_PROPERTY_DISCOVERY+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`fields`, `methods`
+|`fields`
+
+
+a| [[quarkus-morphia_quarkus.morphia.property-naming]]`link:#quarkus-morphia_quarkus.morphia.property-naming[quarkus.morphia.property-naming]`
+
+[.description]
+--
+The strategy to use when calculating collection names for entities without an explicitly mapped property name.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_PROPERTY_NAMING+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_PROPERTY_NAMING+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`identity`, `lower-case`, `snake-case`, `camel-case`, `kebab-case`
+|`identity`
+
+
+a| [[quarkus-morphia_quarkus.morphia.store-empties]]`link:#quarkus-morphia_quarkus.morphia.store-empties[quarkus.morphia.store-empties]`
+
+[.description]
+--
+Should empty Lists/Maps/Sets be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_STORE_EMPTIES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_STORE_EMPTIES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.store-nulls]]`link:#quarkus-morphia_quarkus.morphia.store-nulls[quarkus.morphia.store-nulls]`
+
+[.description]
+--
+Should null properties be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA_STORE_NULLS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA_STORE_NULLS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.auto-import-models]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.auto-import-models[quarkus.morphia."mapper-configs".auto-import-models]`
+
+[.description]
+--
+If critter is present, auto import the generated model information created by link:https://morphia.dev/critter/4.4/index.html[critter].
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__AUTO_IMPORT_MODELS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__AUTO_IMPORT_MODELS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.collection-naming]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.collection-naming[quarkus.morphia."mapper-configs".collection-naming]`
+
+[.description]
+--
+The strategy to use when calculating collection names for entities without an explicitly mapped collection name.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__COLLECTION_NAMING+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__COLLECTION_NAMING+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`identity`, `lower-case`, `snake-case`, `camel-case`, `kebab-case`
+|`camel-case`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.create-caps]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.create-caps[quarkus.morphia."mapper-configs".create-caps]`
+
+[.description]
+--
+Create collection caps.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_CAPS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_CAPS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.create-indexes]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.create-indexes[quarkus.morphia."mapper-configs".create-indexes]`
+
+[.description]
+--
+Create mapped indexes.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_INDEXES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_INDEXES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.create-validators]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.create-validators[quarkus.morphia."mapper-configs".create-validators]`
+
+[.description]
+--
+Enable mapped document validation.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_VALIDATORS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__CREATE_VALIDATORS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`false`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.database]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.database[quarkus.morphia."mapper-configs".database]`
+
+[.description]
+--
+The database to use
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DATABASE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DATABASE+++`
+endif::add-copy-button-to-env-var[]
+--|string
+|required icon:exclamation-circle[title=Configuration property is required]
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.date-storage]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.date-storage[quarkus.morphia."mapper-configs".date-storage]`
+
+[.description]
+--
+Specifies how dates should be stored in the database. This value should only be changed to support legacy systems which use the `DateStorage++#++SYSTEM_DEFAULT` setting. New projects should use the default value.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DATE_STORAGE+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DATE_STORAGE+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`utc`, `system-default`
+|`utc`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.discriminator]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.discriminator[quarkus.morphia."mapper-configs".discriminator]`
+
+[.description]
+--
+The function to use when calculating an entity's discriminator value. Possible values include:   built-in functions defined on `DiscriminatorFunction`   the class names of a type extending `DiscriminatorFunction`
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DISCRIMINATOR+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DISCRIMINATOR+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`class-name`, `lower-class-name`, `lower-simple-name`, `simple-name`
+|`simple-name`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.discriminator-key]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.discriminator-key[quarkus.morphia."mapper-configs".discriminator-key]`
+
+[.description]
+--
+The key to use when storing an entity's discriminator value
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DISCRIMINATOR_KEY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__DISCRIMINATOR_KEY+++`
+endif::add-copy-button-to-env-var[]
+--|string
+|`_t`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.enable-polymorphic-queries]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.enable-polymorphic-queries[quarkus.morphia."mapper-configs".enable-polymorphic-queries]`
+
+[.description]
+--
+Should queries be updated to include subtypes when querying for a specific type
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__ENABLE_POLYMORPHIC_QUERIES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__ENABLE_POLYMORPHIC_QUERIES+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`true`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.ignore-finals]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.ignore-finals[quarkus.morphia."mapper-configs".ignore-finals]`
+
+[.description]
+--
+Should final properties be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__IGNORE_FINALS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__IGNORE_FINALS+++`
+endif::add-copy-button-to-env-var[]
+--|boolean
+|`true`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.packages]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.packages[quarkus.morphia."mapper-configs".packages]`
+
+[.description]
+--
+List the packages to automatically map. To map any subpackages, simply include `.++*++` on the end of the name. e.g. otherwise the package name will be matched exactly against the declared package for a class. If this item is missing/empty, no automatic mapping will be performed.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PACKAGES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PACKAGES+++`
+endif::add-copy-button-to-env-var[]
 --|list of string
 |
 
 
-a| [[quarkus-freemarker_quarkus.freemarker.default-encoding]]`link:#quarkus-freemarker_quarkus.freemarker.default-encoding[quarkus.freemarker.default-encoding]`
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.map-sub-packages]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.map-sub-packages[quarkus.morphia."mapper-configs".map-sub-packages]`
 
 [.description]
 --
-Set the preferred charset template files are stored in.
---|string
-|
+Should "subpackages" also be mapped when mapping a specific package
 
-
-a| [[quarkus-freemarker_quarkus.freemarker.template-exception-handler]]`link:#quarkus-freemarker_quarkus.freemarker.template-exception-handler[quarkus.freemarker.template-exception-handler]`
-
-[.description]
---
-Sets how errors will appear. rethrow, debug, html-debug, ignore.
---|string
-|
-
-
-a| [[quarkus-freemarker_quarkus.freemarker.log-template-exceptions]]`link:#quarkus-freemarker_quarkus.freemarker.log-template-exceptions[quarkus.freemarker.log-template-exceptions]`
-
-[.description]
---
-If false, don't log exceptions inside FreeMarker that it will be thrown at you anyway.
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__MAP_SUB_PACKAGES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__MAP_SUB_PACKAGES+++`
+endif::add-copy-button-to-env-var[]
 --|boolean
-|
+|`false`
 
 
-a| [[quarkus-freemarker_quarkus.freemarker.wrap-unchecked-exceptions]]`link:#quarkus-freemarker_quarkus.freemarker.wrap-unchecked-exceptions[quarkus.freemarker.wrap-unchecked-exceptions]`
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.property-discovery]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.property-discovery[quarkus.morphia."mapper-configs".property-discovery]`
 
 [.description]
 --
-Wrap unchecked exceptions thrown during template processing into TemplateException-s.
+Specifies how properties of an entity are discovered.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PROPERTY_DISCOVERY+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PROPERTY_DISCOVERY+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`fields`, `methods`
+|`fields`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.property-naming]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.property-naming[quarkus.morphia."mapper-configs".property-naming]`
+
+[.description]
+--
+The strategy to use when calculating collection names for entities without an explicitly mapped property name.
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PROPERTY_NAMING+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__PROPERTY_NAMING+++`
+endif::add-copy-button-to-env-var[]
+-- a|
+`identity`, `lower-case`, `snake-case`, `camel-case`, `kebab-case`
+|`identity`
+
+
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.store-empties]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.store-empties[quarkus.morphia."mapper-configs".store-empties]`
+
+[.description]
+--
+Should empty Lists/Maps/Sets be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__STORE_EMPTIES+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__STORE_EMPTIES+++`
+endif::add-copy-button-to-env-var[]
 --|boolean
-|
+|`false`
 
 
-a| [[quarkus-freemarker_quarkus.freemarker.fallback-on-null-loop-variable]]`link:#quarkus-freemarker_quarkus.freemarker.fallback-on-null-loop-variable[quarkus.freemarker.fallback-on-null-loop-variable]`
+a| [[quarkus-morphia_quarkus.morphia.-mapper-configs-.store-nulls]]`link:#quarkus-morphia_quarkus.morphia.-mapper-configs-.store-nulls[quarkus.morphia."mapper-configs".store-nulls]`
 
 [.description]
 --
-If false, do not fall back to higher scopes when reading a null loop variable.
+Should null properties be serialized
+
+ifdef::add-copy-button-to-env-var[]
+Environment variable: env_var_with_copy_button:+++QUARKUS_MORPHIA__MAPPER_CONFIGS__STORE_NULLS+++[]
+endif::add-copy-button-to-env-var[]
+ifndef::add-copy-button-to-env-var[]
+Environment variable: `+++QUARKUS_MORPHIA__MAPPER_CONFIGS__STORE_NULLS+++`
+endif::add-copy-button-to-env-var[]
 --|boolean
-|
-
-
-a| [[quarkus-freemarker_quarkus.freemarker.boolean-format]]`link:#quarkus-freemarker_quarkus.freemarker.boolean-format[quarkus.freemarker.boolean-format]`
-
-[.description]
---
-The string value for the boolean `true` and `false` values, usually intended for human consumption (not for a computer language), separated with comma.
---|string
-|
-
-
-a| [[quarkus-freemarker_quarkus.freemarker.number-format]]`link:#quarkus-freemarker_quarkus.freemarker.number-format[quarkus.freemarker.number-format]`
-
-[.description]
---
-Sets the default number format used to convert numbers to strings.
---|string
-|
-
-
-a| [[quarkus-freemarker_quarkus.freemarker.object-wrapper-expose-fields]]`link:#quarkus-freemarker_quarkus.freemarker.object-wrapper-expose-fields[quarkus.freemarker.object-wrapper-expose-fields]`
-
-[.description]
---
-If true, the object wrapper will be configured to expose fields.
---|boolean
-|
-
-
-a|icon:lock[title=Fixed at build time] [[quarkus-freemarker_quarkus.freemarker.directive-directive]]`link:#quarkus-freemarker_quarkus.freemarker.directive-directive[quarkus.freemarker.directive]`
-
-[.description]
---
-List of directives to register with format name=classname
---|`Map<String,String>`
-|
+|`false`
 
 |===
