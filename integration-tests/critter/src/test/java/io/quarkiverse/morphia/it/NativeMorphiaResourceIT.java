@@ -1,7 +1,7 @@
 package io.quarkiverse.morphia.it;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@NativeImageTest
+@QuarkusIntegrationTest
 public class NativeMorphiaResourceIT extends MorphiaResourceTest {
 }

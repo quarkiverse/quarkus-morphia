@@ -17,7 +17,7 @@
     </modules>
     <properties>
         <critter.version>4.4.2</critter.version>
-        <quarkus.version>2.16.6.Final</quarkus.version>
+        <quarkus.version>3.0.1.Final</quarkus.version>
         <morphia.version>2.3.1</morphia.version>
 
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -64,7 +64,7 @@
             <plugins>
                 <plugin>
                     <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <artifactId>quarkus-extension-maven-plugin</artifactId>
                     <version>${quarkus.version}</version>
                 </plugin>
                 <plugin>
