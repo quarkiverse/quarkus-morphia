@@ -32,10 +32,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
-          cache: 'maven'
-          server-id: central
+          java-version: ${{ env.JAVA_VERSION }}
 
       - name: Checkout repo
         uses: actions/checkout@v3
