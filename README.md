@@ -1,6 +1,6 @@
 # Quarkus - Morphia
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Welcome to Quarkiverse!
@@ -32,9 +32,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://www.antwerkz.com"><img src="https://avatars.githubusercontent.com/u/195021?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Justin Lee</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-morphia/commits?author=evanchooly" title="Code">💻</a> <a href="#maintenance-evanchooly" title="Maintenance">🚧</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.antwerkz.com"><img src="https://avatars.githubusercontent.com/u/195021?v=4?s=100" width="100px;" alt="Justin Lee"/><br /><sub><b>Justin Lee</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-morphia/commits?author=evanchooly" title="Code">💻</a> <a href="#maintenance-evanchooly" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://melloware.com"><img src="https://avatars.githubusercontent.com/u/4399574?v=4?s=100" width="100px;" alt="Melloware"/><br /><sub><b>Melloware</b></sub></a><br /><a href="https://github.com/quarkiverse/quarkus-morphia/commits?author=melloware" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
