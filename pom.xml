@@ -16,7 +16,7 @@
     <module>deployment</module>
   </modules>
   <scm>
-    <connection>:git:git@github.com:quarkiverse/quarkus-morphia.git</connection>
+    <connection>scm:git:git@github.com:quarkiverse/quarkus-morphia.git</connection>
     <developerConnection>scm:git:git@github.com:quarkiverse/quarkus-morphia.git</developerConnection>
     <url>https://github.com/quarkiverse/quarkus-morphia</url>
   </scm>
