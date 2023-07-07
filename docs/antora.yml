@@ -1,5 +1,5 @@
 name: quarkus-morphia
-title: '- Morphia'
+title: Morphia
 version: dev
 nav:
   - modules/ROOT/nav.adoc
