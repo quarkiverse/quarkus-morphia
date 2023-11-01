@@ -9,16 +9,20 @@ import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.MongoDBContainer;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.mongodb.MongoTestResource;
 
 @QuarkusTest
-@QuarkusTestResource(MongoTestResource.class)
 public class MorphiaResourceTest {
+    static final MongoDBContainer CONTAINER;
+
+    static {
+        CONTAINER = new MongoDBContainer("mongo:7");
+        CONTAINER.start();
+    }
 
     @Test
     public void testAlternates() {
