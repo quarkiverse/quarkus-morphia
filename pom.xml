@@ -23,7 +23,7 @@
     </scm>
     <properties>
         <critter.version>4.4.2</critter.version>
-        <quarkus.version>3.0.1.Final</quarkus.version>
+        <quarkus.version>3.5.0</quarkus.version>
         <morphia.version>2.3.4</morphia.version>
 
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
