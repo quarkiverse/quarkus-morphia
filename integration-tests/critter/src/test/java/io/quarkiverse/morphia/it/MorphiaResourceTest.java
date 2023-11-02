@@ -1,6 +1,7 @@
 package io.quarkiverse.morphia.it;
 
 import static io.restassured.RestAssured.given;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isA;
@@ -8,6 +9,8 @@ import static org.hamcrest.Matchers.isA;
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MongoDBContainer;
 
@@ -17,11 +20,18 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 public class MorphiaResourceTest {
-    static final MongoDBContainer CONTAINER;
+    static MongoDBContainer mongoDBContainer;
 
-    static {
-        CONTAINER = new MongoDBContainer("mongo:7");
-        CONTAINER.start();
+    @BeforeAll
+    public static void start() {
+        mongoDBContainer = new MongoDBContainer("mongo:7");
+        mongoDBContainer.setPortBindings(singletonList("27017:27017"));
+        mongoDBContainer.start();
+    }
+
+    @AfterAll
+    public static void stop() {
+        mongoDBContainer.stop();
     }
 
     @Test
