@@ -21,7 +21,6 @@ import org.jboss.jandex.Index;
 import org.jboss.jandex.IndexView;
 import org.jboss.jandex.Indexer;
 import org.jboss.jandex.JarIndexer;
-import org.jetbrains.annotations.NotNull;
 
 import dev.morphia.Datastore;
 import dev.morphia.annotations.AlsoLoad;
@@ -51,8 +50,8 @@ import dev.morphia.annotations.Transient;
 import dev.morphia.annotations.Validation;
 import dev.morphia.annotations.Version;
 import dev.morphia.mapping.codec.references.ReferenceCodec;
-import io.quarkiverse.morphia.MorphiaConfig;
 import io.quarkiverse.morphia.MorphiaRecorder;
+import io.quarkiverse.morphia.QuarkusMorphiaConfig;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -68,7 +67,7 @@ import io.quarkus.mongodb.MongoClientName;
 import io.quarkus.mongodb.deployment.MongoClientNameBuildItem;
 import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
 import io.quarkus.mongodb.runtime.MongoClientRecorder;
-import io.quarkus.mongodb.runtime.MongodbConfig;
+import io.smallrye.common.constraint.NotNull;
 
 @SuppressWarnings("removal")
 public class MorphiaProcessor {
@@ -81,9 +80,8 @@ public class MorphiaProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     public void datastoreRecorder(MongoClientRecorder clientRecorder,
-            MongodbConfig mongodbConfig,
             MorphiaRecorder recorder,
-            MorphiaConfig config,
+            QuarkusMorphiaConfig config,
             MorphiaEntitiesBuildItem entitiesBuildItem,
             List<MongoClientNameBuildItem> mongoClientNames,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
@@ -93,7 +91,7 @@ public class MorphiaProcessor {
                 .configure(Datastore.class)
                 .scope(ApplicationScoped.class)
                 .supplier(recorder.datastoreSupplier(
-                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME, mongodbConfig), config,
+                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME), config,
                         entitiesBuildItem.getNames(), DEFAULT_MONGOCLIENT_NAME))
                 .setRuntimeInit()
                 .done());
@@ -106,7 +104,7 @@ public class MorphiaProcessor {
                     .configure(Datastore.class)
                     .scope(ApplicationScoped.class)
                     .supplier(recorder.datastoreSupplier(
-                            clientRecorder.mongoClientSupplier(clientName, mongodbConfig), config,
+                            clientRecorder.mongoClientSupplier(clientName), config,
                             entitiesBuildItem.getNames(), clientName))
                     .setRuntimeInit();
 

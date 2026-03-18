@@ -22,6 +22,11 @@
       <artifactId>quarkus-mongodb-client-deployment</artifactId>
     </dependency>
     <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkiverse.morphia</groupId>
       <artifactId>quarkus-morphia</artifactId>
       <version>${project.version}</version>

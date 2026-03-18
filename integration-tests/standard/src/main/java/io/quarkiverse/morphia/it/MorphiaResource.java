@@ -64,12 +64,11 @@ public class MorphiaResource {
     @Path("alternates")
     @Produces("application/text")
     public Response alternates() {
-        return Response.ok(
-                datastore != alternate &&
-                        datastore.getDatabase().getName().equals("morphia-int-test") &&
-                        alternate.getDatabase().getName().equals("morphia-alternate") &&
-                        critter.getDatabase().getName().equals("morphia-critter"))
-                .build();
+        boolean result = datastore != alternate &&
+                datastore.getDatabase().getName().equals("morphia-int-test") &&
+                alternate.getDatabase().getName().equals("morphia-alternate") &&
+                critter.getDatabase().getName().equals("morphia-critter");
+        return Response.ok(String.valueOf(result)).build();
     }
 
     @POST
@@ -88,7 +87,7 @@ public class MorphiaResource {
         Document options = getOptions("authors");
         Boolean capped = options.getBoolean("capped");
         Integer max = options.getInteger("max");
-        return Response.ok(TRUE.equals(capped) && max.equals(100)).build();
+        return Response.ok(String.valueOf(TRUE.equals(capped) && max.equals(100))).build();
     }
 
     @GET
@@ -138,7 +137,7 @@ public class MorphiaResource {
 
         Document options = getOptions("books");
         Document validator = (Document) options.get("validator");
-        return Response.ok(validator != null && validator.get("title") != null).build();
+        return Response.ok(String.valueOf(validator != null && validator.get("title") != null)).build();
 
     }
 

@@ -16,6 +16,6 @@
     </properties>
     <modules>
         <module>standard</module>
-        <module>critter</module>
+        <!--<module>critter</module>-->
     </modules>
 </project>

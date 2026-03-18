@@ -9,32 +9,16 @@ import static org.hamcrest.Matchers.isA;
 import org.bson.types.ObjectId;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.MongoDBContainer;
 
 import io.quarkiverse.morphia.it.models.Author;
 import io.quarkiverse.morphia.it.models.Book;
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-//@QuarkusTestResource(value = MongoTestResource.class, initArgs = @ResourceArg(name = MongoTestResource.VERSION, value = "V7_0"))
+@QuarkusTestResource(MongoTestResourceLifecycleManager.class)
 public class MorphiaResourceTest {
-
-    static MongoDBContainer mongoDBContainer;
-
-    @BeforeAll
-    public static void start() {
-        mongoDBContainer = new MongoDBContainer("mongo:7");
-        mongoDBContainer.setPortBindings(singletonList("27017:27017"));
-        mongoDBContainer.start();
-    }
-
-    @AfterAll
-    public static void stop() {
-        mongoDBContainer.stop();
-    }
 
     @Test
     public void testAlternates() {
