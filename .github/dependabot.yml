@@ -13,3 +13,7 @@ updates:
       - dependency-name: "org.apache.maven.plugins:maven-compiler-plugin"
 #    allow:
 #      - dependency-name: dev.morphia.morphia:*
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
