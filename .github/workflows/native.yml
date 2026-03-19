@@ -43,6 +43,7 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'mandrel'
+          version: 'latest'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Date
