@@ -1,0 +1,63 @@
+name: Native Image Tests
+
+on:
+  push:
+    branches:
+      - "master"
+    paths-ignore:
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - '*.md'
+      - '*.adoc'
+      - '*.txt'
+      - '.all-contributorsrc'
+  pull_request:
+    paths-ignore:
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - '*.md'
+      - '*.adoc'
+      - '*.txt'
+      - '.all-contributorsrc'
+
+jobs:
+  native:
+    name: Native Image Tests (Java ${{ matrix.java-version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        java-version:
+          - 17
+          - 21
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup GraalVM (Mandrel)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'mandrel'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "date=$(/bin/date -u "+%Y-%m")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Cache Maven Repository
+        id: cache-maven
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          # refresh cache every month to avoid unlimited growth
+          key: maven-repo-${{ runner.os }}-${{ steps.get-date.outputs.date }}-native-java${{ matrix.java-version }}
+
+      - name: Build and Run Native Integration Tests
+        run: mvn -B verify -Dnative --file pom.xml
