@@ -62,6 +62,7 @@ import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.RuntimeInitializedClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ServiceProviderBuildItem;
 import io.quarkus.mongodb.MongoClientName;
 import io.quarkus.mongodb.deployment.MongoClientNameBuildItem;
@@ -213,5 +214,12 @@ public class MorphiaProcessor {
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
+    }
+
+    @BuildStep
+    List<RuntimeInitializedClassBuildItem> runtimeInitializedClasses() {
+        return List.of(
+                new RuntimeInitializedClassBuildItem("dev.morphia.mapping.Mapper"),
+                new RuntimeInitializedClassBuildItem("dev.morphia.mapping.MorphiaDefaultsProcessor"));
     }
 }
