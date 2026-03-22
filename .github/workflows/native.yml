@@ -32,12 +32,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Mandrel 23.1 is the minimum version for Java 17 that supports --strict-image-heap
+          # Mandrel 23.0.4.1-Final is the latest Mandrel release for JDK 17
           - java-version: 17
-            mandrel-version: '23.1'
-          # Mandrel 24.0 for Java 21 fixes the Object.wait0 heap-scanning issue in 23.1.x
+            mandrel-version: '23.0.4.1-Final'
+          # Mandrel 23.1.x is the Java 21 series; 23.1.10.0-Final is the latest stable
           - java-version: 21
-            mandrel-version: '24.0'
+            mandrel-version: '23.1.10.0-Final'
 
     steps:
       - uses: actions/checkout@v6
