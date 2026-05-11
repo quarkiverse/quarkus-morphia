@@ -1,0 +1,68 @@
+name: Native Image Tests
+
+on:
+  push:
+    branches:
+      - "master"
+    paths-ignore:
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - '*.md'
+      - '*.adoc'
+      - '*.txt'
+      - '.all-contributorsrc'
+  pull_request:
+    paths-ignore:
+      - '.gitignore'
+      - 'CODEOWNERS'
+      - 'LICENSE'
+      - '*.md'
+      - '*.adoc'
+      - '*.txt'
+      - '.all-contributorsrc'
+
+jobs:
+  native:
+    name: Native Image Tests (Java ${{ matrix.java-version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Mandrel 23.0.4.1-Final is the latest Mandrel release for JDK 17
+          - java-version: 17
+            mandrel-version: '23.0.4.1-Final'
+          # Mandrel 23.1.x is the Java 21 series; 23.1.10.0-Final is the latest stable
+          - java-version: 21
+            mandrel-version: '23.1.10.0-Final'
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup GraalVM (Mandrel)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'mandrel'
+          version: ${{ matrix.mandrel-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "date=$(/bin/date -u "+%Y-%m")" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Cache Maven Repository
+        id: cache-maven
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          # refresh cache every month to avoid unlimited growth
+          key: maven-repo-${{ runner.os }}-${{ steps.get-date.outputs.date }}-native-java${{ matrix.java-version }}
+
+      - name: Build and Run Native Integration Tests
+        run: mvn -B verify -Dnative --file pom.xml
