@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -127,39 +128,45 @@ public class MorphiaProcessor {
             BuildProducer<GeneratedResourceBuildItem> resourceItems) throws IOException {
         registerWrapperArrays(reflectiveClasses);
         Index index = indexJar();
-        registerImplementors(index, reflectiveClasses, DotName.createSimple(Codec.class.getName()));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, ReferenceCodec.class));
+        final List<String> forReflection = new ArrayList<>();
+        registerImplementors(index, forReflection, DotName.createSimple(Codec.class.getName()));
+        reflectiveClasses.produce(
+                ReflectiveClassBuildItem.builder(forReflection.toArray(new String[0])).constructors().methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(ReferenceCodec.class).constructors().methods().build());
         registerAnnotations(reflectiveClasses);
     }
 
     private void registerAnnotations(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, AlsoLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, CappedAt.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Collation.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Converters.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Embedded.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Entity.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, EntityListeners.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Field.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Handler.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Id.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IdGetter.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexed.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, dev.morphia.annotations.Index.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexes.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IndexOptions.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, LoadOnly.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, NotSaved.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostPersist.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PreLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PrePersist.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Property.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Reference.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Text.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Transient.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Validation.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Version.class));
+        final String[] forReflection = new String[] {
+                AlsoLoad.class.getName(),
+                CappedAt.class.getName(),
+                Collation.class.getName(),
+                Converters.class.getName(),
+                Embedded.class.getName(),
+                Entity.class.getName(),
+                EntityListeners.class.getName(),
+                Field.class.getName(),
+                Handler.class.getName(),
+                Id.class.getName(),
+                IdGetter.class.getName(),
+                Indexed.class.getName(),
+                dev.morphia.annotations.Index.class.getName(),
+                Indexes.class.getName(),
+                IndexOptions.class.getName(),
+                LoadOnly.class.getName(),
+                NotSaved.class.getName(),
+                PostLoad.class.getName(),
+                PostPersist.class.getName(),
+                PreLoad.class.getName(),
+                PrePersist.class.getName(),
+                Property.class.getName(),
+                Reference.class.getName(),
+                Text.class.getName(),
+                Transient.class.getName(),
+                Validation.class.getName(),
+                Version.class.getName()
+        };
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(forReflection).constructors().methods().fields().build());
     }
 
     @NotNull
@@ -170,10 +177,10 @@ public class MorphiaProcessor {
         return indexer.complete();
     }
 
-    private void registerImplementors(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses, DotName type) {
+    private void registerImplementors(Index index, List<String> forReflection, DotName type) {
         Set<ClassInfo> set = index.getAllKnownImplementors(type);
-        set.forEach(codec -> registerImplementors(index, reflectiveClasses, codec.name()));
-        registerSubclasses(index, reflectiveClasses, type);
+        set.forEach(codec -> registerImplementors(index, forReflection, codec.name()));
+        registerSubclasses(index, forReflection, type);
     }
 
     @BuildStep
@@ -186,28 +193,39 @@ public class MorphiaProcessor {
             var classes = index.getKnownClasses().stream()
                     .filter(info -> info.classAnnotation(annotation) != null)
                     .collect(Collectors.toList());
-            classes.forEach(info -> {
-                reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, info.name().toString()));
-                list.add(info.name().toString());
-            });
+            classes.forEach(info -> list.add(info.name().toString()));
         }
 
+        reflectiveClasses.produce(
+                ReflectiveClassBuildItem.builder(list.toArray(new String[0])).constructors().methods().fields().build());
         return new MorphiaEntitiesBuildItem(list);
     }
 
-    private void registerSubclasses(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses, DotName type) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, type.toString()));
-        index.getAllKnownSubclasses(type).forEach(codec -> registerSubclasses(index, reflectiveClasses, type));
+    private void registerSubclasses(Index index, List<String> forReflection, DotName type) {
+        // Wrapper that initializes the visited set to avoid infinite recursion and duplicates
+        registerSubclasses(index, forReflection, type, new HashSet<>());
+    }
+
+    private void registerSubclasses(Index index, List<String> forReflection, DotName type, Set<DotName> visited) {
+        // If we've already processed this type, avoid re-processing to prevent cycles/duplicates
+        if (!visited.add(type)) {
+            return;
+        }
+        forReflection.add(type.toString());
+        index.getAllKnownSubclasses(type)
+                .forEach(codec -> registerSubclasses(index, forReflection, codec.name(), visited));
     }
 
     private void registerWrapperArrays(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Boolean[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Byte[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Character[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Double[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Float[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Integer[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Long[].class));
+        final String[] forReflection = new String[] {
+                Boolean[].class.getName(),
+                Byte[].class.getName(),
+                Character[].class.getName(),
+                Double[].class.getName(),
+                Float[].class.getName(),
+                Integer[].class.getName(),
+                Long[].class.getName() };
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(forReflection).constructors().methods().build());
     }
 
     @BuildStep
