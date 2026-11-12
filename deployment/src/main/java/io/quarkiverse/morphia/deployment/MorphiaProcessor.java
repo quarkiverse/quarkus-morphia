@@ -117,38 +117,39 @@ public class MorphiaProcessor {
         registerWrapperArrays(reflectiveClasses);
         Index index = indexJar();
         registerImplementors(index, reflectiveClasses, DotName.createSimple(Codec.class.getName()));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, ReferenceCodec.class));
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(ReferenceCodec.class).methods().build());
         registerAnnotations(reflectiveClasses);
     }
 
     private void registerAnnotations(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, AlsoLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, CappedAt.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Collation.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Converters.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Embedded.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Entity.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, EntityListeners.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Field.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Handler.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Id.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IdGetter.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexed.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, dev.morphia.annotations.Index.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Indexes.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, IndexOptions.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, LoadOnly.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, NotSaved.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PostPersist.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PreLoad.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, PrePersist.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Property.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Reference.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Text.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Transient.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Validation.class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, Version.class));
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(AlsoLoad.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(CappedAt.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Collation.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Converters.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Embedded.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Entity.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(EntityListeners.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Field.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Handler.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Id.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(IdGetter.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Indexed.class).methods().fields().build());
+        reflectiveClasses
+                .produce(ReflectiveClassBuildItem.builder(dev.morphia.annotations.Index.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Indexes.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(IndexOptions.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(LoadOnly.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(NotSaved.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(PostLoad.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(PostPersist.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(PreLoad.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(PrePersist.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Property.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Reference.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Text.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Transient.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Validation.class).methods().fields().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Version.class).methods().fields().build());
     }
 
     @NotNull
@@ -176,7 +177,7 @@ public class MorphiaProcessor {
                     .filter(info -> info.classAnnotation(annotation) != null)
                     .collect(Collectors.toList());
             classes.forEach(info -> {
-                reflectiveClasses.produce(new ReflectiveClassBuildItem(true, true, info.name().toString()));
+                reflectiveClasses.produce(ReflectiveClassBuildItem.builder(info.name().toString()).methods().fields().build());
                 list.add(info.name().toString());
             });
         }
@@ -185,18 +186,18 @@ public class MorphiaProcessor {
     }
 
     private void registerSubclasses(Index index, BuildProducer<ReflectiveClassBuildItem> reflectiveClasses, DotName type) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, type.toString()));
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(type.toString()).methods().build());
         index.getAllKnownSubclasses(type).forEach(codec -> registerSubclasses(index, reflectiveClasses, type));
     }
 
     private void registerWrapperArrays(BuildProducer<ReflectiveClassBuildItem> reflectiveClasses) {
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Boolean[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Byte[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Character[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Double[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Float[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Integer[].class));
-        reflectiveClasses.produce(new ReflectiveClassBuildItem(true, false, Long[].class));
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Boolean[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Byte[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Character[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Double[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Float[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Integer[].class).methods().build());
+        reflectiveClasses.produce(ReflectiveClassBuildItem.builder(Long[].class).methods().build());
     }
 
     @BuildStep
