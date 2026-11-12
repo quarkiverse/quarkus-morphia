@@ -50,7 +50,6 @@ import dev.morphia.annotations.Validation;
 import dev.morphia.annotations.Version;
 import dev.morphia.mapping.codec.references.ReferenceCodec;
 import io.quarkiverse.morphia.MorphiaRecorder;
-import io.quarkiverse.morphia.QuarkusMorphiaConfig;
 import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -80,7 +79,6 @@ public class MorphiaProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     public void datastoreRecorder(MongoClientRecorder clientRecorder,
             MorphiaRecorder recorder,
-            QuarkusMorphiaConfig config,
             MorphiaEntitiesBuildItem entitiesBuildItem,
             MongoClientsBuildItem mongoClients,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
@@ -95,7 +93,7 @@ public class MorphiaProcessor {
                     .configure(Datastore.class)
                     .scope(ApplicationScoped.class)
                     .supplier(recorder.datastoreSupplier(
-                            clientRecorder.mongoClientSupplier(clientName), config,
+                            clientRecorder.mongoClientSupplier(clientName),
                             entitiesBuildItem.getNames(), clientName))
                     .setRuntimeInit();
 
