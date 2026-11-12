@@ -1,6 +1,5 @@
 package io.quarkiverse.morphia.deployment;
 
-import static io.quarkus.mongodb.runtime.MongoClientBeanUtil.DEFAULT_MONGOCLIENT_NAME;
 import static java.util.List.of;
 
 import java.io.File;
@@ -64,8 +63,8 @@ import io.quarkus.deployment.builditem.GeneratedResourceBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ServiceProviderBuildItem;
 import io.quarkus.mongodb.MongoClientName;
-import io.quarkus.mongodb.deployment.MongoClientNameBuildItem;
-import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
+import io.quarkus.mongodb.deployment.spi.MongoClientBuildItem;
+import io.quarkus.mongodb.deployment.spi.MongoClientsBuildItem;
 import io.quarkus.mongodb.runtime.MongoClientRecorder;
 import io.smallrye.common.constraint.NotNull;
 
@@ -83,22 +82,14 @@ public class MorphiaProcessor {
             MorphiaRecorder recorder,
             QuarkusMorphiaConfig config,
             MorphiaEntitiesBuildItem entitiesBuildItem,
-            List<MongoClientNameBuildItem> mongoClientNames,
+            MongoClientsBuildItem mongoClients,
             BuildProducer<SyntheticBeanBuildItem> syntheticBeanBuildItemBuildProducer,
             BuildProducer<ServiceProviderBuildItem> items) {
 
-        syntheticBeanBuildItemBuildProducer.produce(SyntheticBeanBuildItem
-                .configure(Datastore.class)
-                .scope(ApplicationScoped.class)
-                .supplier(recorder.datastoreSupplier(
-                        clientRecorder.mongoClientSupplier(DEFAULT_MONGOCLIENT_NAME), config,
-                        entitiesBuildItem.getNames(), DEFAULT_MONGOCLIENT_NAME))
-                .setRuntimeInit()
-                .done());
+        // the default client and the clients referenced with @MongoClientName
+        for (MongoClientBuildItem mongoClient : mongoClients.getMongoClients()) {
 
-        for (MongoClientNameBuildItem mongoClientName : mongoClientNames) {
-
-            String clientName = mongoClientName.getName();
+            String clientName = mongoClient.getName();
 
             SyntheticBeanBuildItem.ExtendedBeanConfigurator configurator = SyntheticBeanBuildItem
                     .configure(Datastore.class)
@@ -108,13 +99,11 @@ public class MorphiaProcessor {
                             entitiesBuildItem.getNames(), clientName))
                     .setRuntimeInit();
 
-            if (MongoClientBeanUtil.isDefault(clientName)) {
+            if (mongoClient.isDefault()) {
                 configurator.addQualifier(Default.class);
             } else {
                 configurator.addQualifier().annotation(DotNames.NAMED).addValue("value", clientName).done();
-                if (mongoClientName.isAddQualifier()) {
-                    configurator.addQualifier().annotation(MONGO_CLIENT_NAME).addValue("value", clientName).done();
-                }
+                configurator.addQualifier().annotation(MONGO_CLIENT_NAME).addValue("value", clientName).done();
             }
 
             syntheticBeanBuildItemBuildProducer.produce(configurator.done());
