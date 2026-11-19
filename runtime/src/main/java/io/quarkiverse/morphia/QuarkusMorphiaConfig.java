@@ -4,7 +4,7 @@ import java.util.Map;
 
 import dev.morphia.config.MorphiaConfig;
 import io.quarkiverse.morphia.runtime.MorphiaMappingConfig;
-import io.quarkus.mongodb.runtime.MongoClientBeanUtil;
+import io.quarkus.mongodb.runtime.MongoConfig;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
@@ -36,7 +36,7 @@ public interface QuarkusMorphiaConfig {
     Map<String, MorphiaMappingConfig> namedConfigs();
 
     default MorphiaConfig getConfig(String clientName) {
-        if (MongoClientBeanUtil.isDefault(clientName)) {
+        if (MongoConfig.isDefaultClient(clientName)) {
             return defaultConfig().toMorphiaConfig();
         }
         Map<String, MorphiaMappingConfig> named = namedConfigs();

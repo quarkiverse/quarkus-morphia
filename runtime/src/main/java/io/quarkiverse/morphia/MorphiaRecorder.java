@@ -9,14 +9,22 @@ import com.mongodb.client.MongoClient;
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.config.MorphiaConfig;
+import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
 @Recorder
 public class MorphiaRecorder {
-    public Supplier<Datastore> datastoreSupplier(Supplier<MongoClient> mongoClientSupplier,
-            QuarkusMorphiaConfig quarkusMorphiaConfig, List<String> entities, String clientName) {
+
+    private final RuntimeValue<QuarkusMorphiaConfig> runtimeConfig;
+
+    public MorphiaRecorder(RuntimeValue<QuarkusMorphiaConfig> runtimeConfig) {
+        this.runtimeConfig = runtimeConfig;
+    }
+
+    public Supplier<Datastore> datastoreSupplier(Supplier<MongoClient> mongoClientSupplier, List<String> entities,
+            String clientName) {
         return () -> {
-            MorphiaConfig config = quarkusMorphiaConfig.getConfig(clientName);
+            MorphiaConfig config = runtimeConfig.getValue().getConfig(clientName);
             Datastore datastore = Morphia.createDatastore(mongoClientSupplier.get(), config);
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
             config.packages().forEach(mapPackage -> {
